@@ -1,12 +1,25 @@
 {
-  "background_color": "#0f0c29",
-  "dir": "ltr",
-  "display": "fullscreen",
   "name": "Worms Zone",
-  "orientation": "landscape",
-  "scope": "/",
   "short_name": "Worms",
+  "description": "Multiplayer Snake Battle Game by Punit Khandelwal",
   "start_url": "/WORMS-ZONE/",
+  "scope": "/WORMS-ZONE/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0f0c29",
   "theme_color": "#00ff88",
-  "description": "Multiplayer Snake Battle Game\nMade By PUNIT KHANDELWAL"
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/khandelwalpunit763-spec/WORMS-ZONE/main/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/khandelwalpunit763-spec/WORMS-ZONE/main/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
