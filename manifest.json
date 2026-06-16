@@ -1,0 +1,12 @@
+{
+  "background_color": "#0f0c29",
+  "dir": "ltr",
+  "display": "fullscreen",
+  "name": "Worms Zone",
+  "orientation": "landscape",
+  "scope": "/",
+  "short_name": "Worms",
+  "start_url": "/WORMS-ZONE/",
+  "theme_color": "#00ff88",
+  "description": "Multiplayer Snake Battle Game\nMade By PUNIT KHANDELWAL"
+}
