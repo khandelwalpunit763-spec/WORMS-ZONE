@@ -1,22 +1,22 @@
 {
-  "name": "Worms Zone",
-  "short_name": "Worms",
-  "description": "Multiplayer Snake Battle Game by Punit Khandelwal",
-  "start_url": "/WORMS-ZONE/",
-  "scope": "/WORMS-ZONE/",
+  "name": "Worms Zone - Cosmic",
+  "short_name": "WormsZone",
+  "description": "🐍 Battle worms game by Punit Khandelwal",
+  "start_url": "./index.html",
   "display": "fullscreen",
-  "orientation": "landscape",
-  "background_color": "#0f0c29",
+  "orientation": "any",
+  "background_color": "#0a0a1a",
   "theme_color": "#00ff88",
+  "scope": "./",
   "icons": [
     {
-      "src": "android-chrome-192x192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "android-chrome-512x512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
