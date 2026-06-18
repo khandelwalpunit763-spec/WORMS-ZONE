@@ -30,6 +30,7 @@ input.txt::placeholder { color: rgba(255,255,255,0.5); }
 .btn.danger { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; box-shadow: 0 5px 20px rgba(255,68,68,0.5); }
 .btn.purple { background: linear-gradient(135deg, #aa44ff, #ff44aa); color: white; box-shadow: 0 5px 20px rgba(170,68,255,0.5); }
 .btn.gold { background: linear-gradient(135deg, #ffd700, #ff8800); color: #000; box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
+.btn.small { padding: 8px 18px; font-size: 12px; }
 .coin-display { position: fixed; top: 15px; right: 15px; background: linear-gradient(135deg, #ffd700, #ff8800); color: #000; padding: 10px 20px; border-radius: 25px; font-weight: bold; font-size: 16px; z-index: 50; box-shadow: 0 4px 20px rgba(255,215,0,0.6); animation: coinPulse 2s infinite; border: 2px solid #fff; }
 @keyframes coinPulse { 0%, 100% { box-shadow: 0 4px 20px rgba(255,215,0,0.6); } 50% { box-shadow: 0 4px 30px rgba(255,215,0,0.9); } }
 .mode-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
@@ -66,7 +67,10 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .player-item { padding: 10px; background: rgba(0,255,136,0.1); border-radius: 12px; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border: 1px solid rgba(0,255,136,0.3); }
 .player-item.host { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.4); }
 .error-msg { color: #ff4444; font-size: 14px; margin: 10px 0; text-align: center; }
-.leaderboard-container { background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border: 2px solid rgba(0,255,255,0.4); border-radius: 25px; padding: 25px; max-width: 700px; width: 95%; max-height: 80vh; overflow-y: auto; }
+
+#leaderboardScreen { justify-content: flex-start !important; padding-top: 20px !important; }
+#leaderboardScreen h2 { margin-top: 10px; margin-bottom: 15px; }
+.leaderboard-container { background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border: 2px solid rgba(0,255,255,0.4); border-radius: 25px; padding: 20px; max-width: 700px; width: 95%; max-height: 65vh; overflow-y: auto; margin: 0 auto; }
 .lb-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
 .lb-tab { padding: 10px 18px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; cursor: pointer; font-size: 13px; transition: all 0.3s; color: white; font-weight: bold; }
 .lb-tab:hover { background: rgba(0,255,255,0.2); }
@@ -88,6 +92,7 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .stat-item { background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; text-align: center; }
 .stat-item .lbl { font-size: 10px; color: rgba(255,255,255,0.6); }
 .stat-item .val { font-size: 16px; color: #00ffff; font-weight: bold; }
+
 #gameScreen { padding: 0; }
 #gameCanvas { display: block; background: #0a0a1a; cursor: crosshair; touch-action: none; }
 .hud { position: fixed; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 2px solid rgba(0,255,255,0.5); border-radius: 15px; z-index: 10; padding: 12px 16px; box-shadow: 0 5px 25px rgba(0,255,255,0.3); }
@@ -171,18 +176,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .creator-name { background: linear-gradient(45deg, #ffd700, #ff00ff, #00ffff, #ffd700); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 18px; letter-spacing: 2px; animation: nameGlow 3s linear infinite; }
 @keyframes nameGlow { 100% { background-position: 300% 0%; } }
 @keyframes creditGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,0,255,0.5); } }
-.snake-mode-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin: 15px 0; }
-.snake-mode-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 20px; width: 200px; cursor: pointer; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); text-align: center; }
-.snake-mode-card:hover { border-color: #00ffff; transform: translateY(-8px) scale(1.03); }
-.snake-mode-card.selected { border-color: #00ff88; background: rgba(0,255,136,0.1); box-shadow: 0 0 30px rgba(0,255,136,0.6); transform: scale(1.05); }
-.snake-mode-icon { font-size: 45px; margin-bottom: 8px; }
-.snake-mode-card h3 { font-size: 18px; margin-bottom: 6px; color: #00ffff; }
-.snake-mode-card p { font-size: 12px; color: rgba(255,255,255,0.7); }
-.snake-mode-card .mode-detail { font-size: 11px; color: #ffd700; margin-top: 6px; font-weight: bold; }
-.ai-warning { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.2); border: 3px solid #ff4444; border-radius: 20px; padding: 15px 30px; z-index: 25; font-size: 18px; font-weight: bold; color: #ff4444; animation: warningFlash 0.5s infinite; pointer-events: none; display: none; }
-.ai-warning.active { display: block; }
-@keyframes warningFlash { 50% { opacity: 0.5; border-color: #ff8800; } }
-.growth-badge { position: fixed; top: 65px; left: 10px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); border: 2px solid #ffd700; border-radius: 15px; padding: 6px 14px; z-index: 15; font-size: 12px; font-weight: bold; color: #ffd700; }
 .tutorial-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200; display: none; pointer-events: none; }
 .tutorial-overlay.active { display: block; }
 .tutorial-dim { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); pointer-events: auto; }
@@ -227,12 +220,18 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .tutorial-float-btn { position: relative; display: inline-block; margin-top: 10px; }
 .tutorial-float-btn .new-badge { position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; animation: badgePulse 1s infinite; }
 @keyframes badgePulse { 50% { transform: scale(1.1); } }
+
+.name-display { position: fixed; top: 15px; left: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 20px; font-size: 13px; z-index: 50; border: 2px solid rgba(0,255,255,0.4); display: none; }
+.name-display.show { display: block; }
+.name-display strong { color: #00ffff; }
+.name-display .change { color: #ffd700; cursor: pointer; margin-left: 10px; text-decoration: underline; font-size: 11px; }
 </style>
 </head>
 <body>
 
 <canvas id="starfield"></canvas>
 <div class="coin-display" id="coinDisplay" style="display:none;">💰 <span id="totalCoins">0</span></div>
+<div class="name-display" id="nameDisplay">👤 <strong id="topPlayerName">-</strong><span class="change" onclick="changeName()">Change</span></div>
 
 <div id="nameScreen" class="screen active">
     <h1 class="title">🐍 WORMS ZONE</h1>
@@ -255,7 +254,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <button class="btn gold" onclick="startTutorial()">📖 TUTORIAL</button>
         <span class="new-badge" id="tutNewBadge">NEW</span>
     </div>
-    <button class="btn secondary" onclick="showScreen('nameScreen')" style="margin-top:15px;">← BACK</button>
 </div>
 
 <div id="leaderboardScreen" class="screen">
@@ -273,8 +271,10 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
             <div class="stats-grid" id="myStatsGrid"></div>
         </div>
     </div>
-    <button class="btn danger" onclick="clearLeaderboard()" style="margin-top:15px; padding:10px 25px; font-size:13px;">🗑️ CLEAR ALL</button>
-    <button class="btn secondary" onclick="showScreen('modeScreen')">← BACK</button>
+    <div style="margin-top: 15px;">
+        <button class="btn danger small" onclick="clearLeaderboard()">🗑️ CLEAR ALL</button>
+        <button class="btn secondary" onclick="showScreen('modeScreen')">← BACK</button>
+    </div>
 </div>
 
 <div id="joinScreen" class="screen">
@@ -289,15 +289,15 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
     <h2>🗺️ SELECT MAP</h2>
     <div class="map-container">
         <div class="map-card" onclick="selectMap('small', this)">
-            <div class="map-icon">🟢</div><h3>Small</h3><p>⏱️ 15 Min</p><p>📏 7500x6000</p><p>🐛 120 Bots</p><p>🍾 100 Bottles</p>
+            <div class="map-icon">🟢</div><h3>Small</h3><p>⏱️ 15 Min</p><p>📏 7500x6000</p><p>🐛 80 Bots</p><p>🍾 80 Bottles</p>
             <div class="prize-badge bronze">🥉 +200 + Coins</div>
         </div>
         <div class="map-card" onclick="selectMap('medium', this)">
-            <div class="map-icon">🟡</div><h3>Medium</h3><p>⏱️ 20 Min</p><p>📏 12500x10000</p><p>🐛 180 Bots</p><p>🍾 200 Bottles</p>
+            <div class="map-icon">🟡</div><h3>Medium</h3><p>⏱️ 20 Min</p><p>📏 12500x10000</p><p>🐛 120 Bots</p><p>🍾 150 Bottles</p>
             <div class="prize-badge silver">🥈 +500 + Coins</div>
         </div>
         <div class="map-card" onclick="selectMap('large', this)">
-            <div class="map-icon">🔴</div><h3>Large</h3><p>⏱️ 30 Min</p><p>📏 20000x16000</p><p>🐛 300 Bots</p><p>🍾 500 Bottles</p>
+            <div class="map-icon">🔴</div><h3>Large</h3><p>⏱️ 30 Min</p><p>📏 20000x16000</p><p>🐛 180 Bots</p><p>🍾 250 Bottles</p>
             <div class="prize-badge gold">🥇 +1000 + Coins</div>
         </div>
     </div>
@@ -309,41 +309,8 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
             <span style="color:#aa44ff;">🟣 Ghost</span><span style="color:#ff8800;">🟠 2x Score</span>
         </div>
     </div>
-    <button class="btn" onclick="goToSnakeModeScreen()">NEXT ➜</button>
-    <button class="btn secondary" onclick="showScreen('modeScreen')">← BACK</button>
-</div>
-
-<div id="snakeModeScreen" class="screen">
-    <h2>🐍 SNAKE GROWTH MODE</h2>
-    <p style="color:rgba(255,255,255,0.6); margin-bottom:15px; text-align:center; font-size:14px;">Choose how your snake grows!</p>
-    <div class="snake-mode-container">
-        <div class="snake-mode-card" id="modeCardSlow" onclick="selectSnakeMode('slow', this)">
-            <div class="snake-mode-icon">🐢</div>
-            <h3>SLOW</h3>
-            <p>Snake grows slowly</p>
-            <div class="mode-detail">+1 segment per food</div>
-            <div class="mode-detail">Speed: 3.5</div>
-            <div class="mode-detail">Easy Mode 😊</div>
-        </div>
-        <div class="snake-mode-card selected" id="modeCardNormal" onclick="selectSnakeMode('normal', this)">
-            <div class="snake-mode-icon">🐍</div>
-            <h3>NORMAL</h3>
-            <p>Balanced growth</p>
-            <div class="mode-detail">+2 segments per food</div>
-            <div class="mode-detail">Speed: 4</div>
-            <div class="mode-detail">Default Mode ⚡</div>
-        </div>
-        <div class="snake-mode-card" id="modeCardExtreme" onclick="selectSnakeMode('extreme', this)">
-            <div class="snake-mode-icon">🔥</div>
-            <h3>EXTREME</h3>
-            <p>Rapid growth & speed!</p>
-            <div class="mode-detail">+4 segments per food</div>
-            <div class="mode-detail">Speed: 5</div>
-            <div class="mode-detail">Hard Mode 💀</div>
-        </div>
-    </div>
     <button class="btn" onclick="goToSkinScreen()">NEXT ➜</button>
-    <button class="btn secondary" onclick="showScreen('mapScreen')">← BACK</button>
+    <button class="btn secondary" onclick="showScreen('modeScreen')">← BACK</button>
 </div>
 
 <div id="skinScreen" class="screen">
@@ -391,8 +358,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         </div>
     </div>
     <div id="activePowers"></div>
-    <div class="growth-badge" id="growthBadge">🐍 Normal</div>
-    <div class="ai-warning" id="aiWarning">⚠️ SNAKE ATTACKING! ⚠️</div>
     <div id="hudRight" class="hud">
         <div class="hud-row"><div class="hud-label">👤 PLAYER</div><div class="hud-value" id="playerNameDisplay" style="font-size:14px;">-</div></div>
         <div class="hud-row"><div class="hud-label">🏆 SCORE</div><div class="hud-value" id="scoreValue">0</div></div>
@@ -421,7 +386,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <div class="stat-row"><span class="label">Length:</span><span class="value" id="goLength">0 m</span></div>
         <div class="stat-row"><span class="label">Kills:</span><span class="value" id="goKills">0</span></div>
         <div class="stat-row"><span class="label">Time:</span><span class="value" id="goTime">0s</span></div>
-        <div class="stat-row"><span class="label">Mode:</span><span class="value" id="goMode">Normal</span></div>
         <div class="reward-box">
             <div>🎁 MATCH REWARDS</div>
             <div class="big">💰 +<span id="goCoinsEarned">0</span> coins</div>
@@ -447,7 +411,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <div class="stat-row"><span class="label">Score:</span><span class="value" id="winScore">0</span></div>
         <div class="stat-row"><span class="label">Length:</span><span class="value" id="winLength">0 m</span></div>
         <div class="stat-row"><span class="label">Kills:</span><span class="value" id="winKills">0</span></div>
-        <div class="stat-row"><span class="label">Mode:</span><span class="value" id="winMode">Normal</span></div>
         <div class="reward-box">
             <div>🎁 MATCH REWARDS</div>
             <div class="big">💰 +<span id="winCoinsEarned">0</span> coins</div>
@@ -513,21 +476,11 @@ let totalKills = 0, score = 0;
 let totalCoins = parseInt(localStorage.getItem('wormsCoins') || '0');
 let peer = null, isHost = false, myPeerId = '';
 let hostConnections = {}, clientConnection = null, roomPlayers = {};
-let boostActive = false, boostDuration = 3000, boostCooldown = 10000;
+let boostActive = false, boostDuration = 3000, boostCooldown = 7000;
 let boostTimer = 0, boostCooldownTimer = 0, canBoost = true;
 let turnLeft = false, turnRight = false, mouseControlActive = false;
 let activePowers = {};
 let liveRankingUpdateCounter = 0;
-
-let selectedSnakeMode = 'normal';
-const SNAKE_MODES = {
-    slow: { name: '🐢 Slow', growMultiplier: 0.5, speedBase: 3.5, enemySpeedBase: 1.8, enemySpeedRange: 0.5, description: 'Easy Mode', scoreMultiplier: 0.8 },
-    normal: { name: '🐍 Normal', growMultiplier: 1, speedBase: 4, enemySpeedBase: 2, enemySpeedRange: 0.8, description: 'Default Mode', scoreMultiplier: 1 },
-    extreme: { name: '🔥 Extreme', growMultiplier: 2, speedBase: 5, enemySpeedBase: 2.8, enemySpeedRange: 1.2, description: 'Hard Mode', scoreMultiplier: 1.5 }
-};
-
-let aiAttackWarningTimer = 0;
-let aiAttackingEnemies = [];
 
 function loadLeaderboard() { return JSON.parse(localStorage.getItem('wormsLeaderboard') || '[]'); }
 function saveLeaderboard(data) { localStorage.setItem('wormsLeaderboard', JSON.stringify(data)); }
@@ -635,9 +588,9 @@ const POWERS = [
     { type: 'score', name: '💎 2X SCORE', color: '#ff8800', duration: 30000, cssClass: 'score' }
 ];
 const MAPS = {
-    small: { name: 'Small Map', time: 15*60, width: 7500, height: 6000, enemies: 120, foods: 1000, bottles: 100, prize: 'bronze', prizeBonus: 200, prizeName: '🥉 BRONZE TROPHY', winCoins: 50 },
-    medium: { name: 'Medium Map', time: 20*60, width: 12500, height: 10000, enemies: 180, foods: 2000, bottles: 200, prize: 'silver', prizeBonus: 500, prizeName: '🥈 SILVER TROPHY', winCoins: 150 },
-    large: { name: 'Large Map', time: 30*60, width: 20000, height: 16000, enemies: 300, foods: 2000, bottles: 500, prize: 'gold', prizeBonus: 1000, prizeName: '🥇 GOLD TROPHY', winCoins: 500 }
+    small: { name: 'Small Map', time: 15*60, width: 7500, height: 6000, enemies: 80, foods: 800, bottles: 80, prize: 'bronze', prizeBonus: 200, prizeName: '🥉 BRONZE TROPHY', winCoins: 50 },
+    medium: { name: 'Medium Map', time: 20*60, width: 12500, height: 10000, enemies: 120, foods: 1500, bottles: 150, prize: 'silver', prizeBonus: 500, prizeName: '🥈 SILVER TROPHY', winCoins: 150 },
+    large: { name: 'Large Map', time: 30*60, width: 20000, height: 16000, enemies: 180, foods: 2000, bottles: 250, prize: 'gold', prizeBonus: 1000, prizeName: '🥇 GOLD TROPHY', winCoins: 500 }
 };
 
 function updateCoinDisplay() {
@@ -650,7 +603,6 @@ function calculateRewards(isWin) {
     coins += totalKills * 5;
     coins += Math.floor(score / 100) * 10;
     if (isWin) coins += MAPS[selectedMap].winCoins;
-    if (selectedSnakeMode === 'extreme') coins = Math.floor(coins * 1.5);
     return coins;
 }
 
@@ -659,15 +611,29 @@ function showScreen(id) {
     document.getElementById(id).classList.add('active');
     const hideCoins = ['nameScreen', 'gameScreen', 'loadingScreen'];
     document.getElementById('coinDisplay').style.display = hideCoins.includes(id) ? 'none' : 'block';
+    const hideName = ['nameScreen', 'gameScreen', 'loadingScreen'];
+    const nameDisp = document.getElementById('nameDisplay');
+    if (hideName.includes(id) || !playerName) {
+        nameDisp.classList.remove('show');
+    } else {
+        nameDisp.classList.add('show');
+        document.getElementById('topPlayerName').textContent = playerName;
+    }
 }
 
 function submitName() {
     const name = document.getElementById('nameInput').value.trim();
     if (!name) { alert('Enter your name!'); return; }
     playerName = name;
+    localStorage.setItem('wormsPlayerName', playerName);
     document.getElementById('welcomeName').textContent = playerName;
     updateCoinDisplay();
     showScreen('modeScreen');
+}
+
+function changeName() {
+    document.getElementById('nameInput').value = playerName;
+    showScreen('nameScreen');
 }
 
 function selectMode(mode) {
@@ -682,18 +648,8 @@ function selectMap(map, el) {
     el.classList.add('selected');
 }
 
-function goToSnakeModeScreen() {
-    if (!selectedMap) { alert('Select a map!'); return; }
-    showScreen('snakeModeScreen');
-}
-
-function selectSnakeMode(mode, el) {
-    selectedSnakeMode = mode;
-    document.querySelectorAll('.snake-mode-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-}
-
 function goToSkinScreen() {
+    if (!selectedMap) { alert('Select a map!'); return; }
     buildSkinGrid();
     document.getElementById('skinNextBtn').textContent = 'CONTINUE ➜';
     document.getElementById('skinNextBtn').onclick = afterSkinSelect;
@@ -702,7 +658,7 @@ function goToSkinScreen() {
 
 function backFromSkin() { 
     if (gameMode === 'join') showScreen('joinScreen'); 
-    else showScreen('snakeModeScreen'); 
+    else showScreen('mapScreen'); 
 }
 
 function buildSkinGrid() {
@@ -1029,7 +985,6 @@ function multiplayerInit(players, initialFoods, initialBottles) {
     isMultiplayer = true;
     showScreen('gameScreen');
     const map = MAPS[selectedMap];
-    const modeConfig = SNAKE_MODES[selectedSnakeMode];
     WORLD.w = map.width; WORLD.h = map.height;
     timeLimit = map.time;
     totalKills = 0; score = 0;
@@ -1037,9 +992,8 @@ function multiplayerInit(players, initialFoods, initialBottles) {
     document.getElementById('mapName').textContent = map.name;
     document.getElementById('playerNameDisplay').textContent = playerName;
     document.getElementById('killsValue').textContent = '0';
-    document.getElementById('growthBadge').textContent = modeConfig.name;
     const skin = SKINS[selectedSkin];
-    player = { id: myPeerId, name: playerName, skin: skin, segments: [], radius: 12, speed: modeConfig.speedBase, angle: 0, alive: true };
+    player = { id: myPeerId, name: playerName, skin: skin, segments: [], radius: 12, speed: 4, angle: 0, alive: true };
     const sx = Math.random() * (WORLD.w - 400) + 200;
     const sy = Math.random() * (WORLD.h - 400) + 200;
     for (let i = 0; i < 10; i++) player.segments.push({ x: sx, y: sy + i*8 });
@@ -1059,7 +1013,6 @@ function multiplayerInit(players, initialFoods, initialBottles) {
 
 function initGame() {
     const map = MAPS[selectedMap];
-    const modeConfig = SNAKE_MODES[selectedSnakeMode];
     WORLD.w = map.width; WORLD.h = map.height;
     timeLimit = map.time;
     totalKills = 0; score = 0;
@@ -1068,14 +1021,12 @@ function initGame() {
     document.getElementById('mapName').textContent = map.name;
     document.getElementById('playerNameDisplay').textContent = playerName;
     document.getElementById('killsValue').textContent = '0';
-    document.getElementById('growthBadge').textContent = modeConfig.name;
     const skin = SKINS[selectedSkin];
-    player = { name: playerName, skin: skin, segments: [], radius: 12, speed: modeConfig.speedBase, angle: 0, alive: true };
+    player = { name: playerName, skin: skin, segments: [], radius: 12, speed: 4, angle: 0, alive: true };
     for (let i = 0; i < 10; i++) player.segments.push({ x: WORLD.w/2, y: WORLD.h/2 + i*8 });
     foods = []; for (let i = 0; i < map.foods; i++) createFood();
     bottles = []; for (let i = 0; i < map.bottles; i++) createBottle();
     enemies = []; for (let i = 0; i < map.enemies; i++) createEnemy();
-    aiAttackingEnemies = [];
     resetGameState();
     gameLoop();
 }
@@ -1097,15 +1048,14 @@ function createBottle() { bottles.push({ x: Math.random() * WORLD.w, y: Math.ran
 
 function createEnemy() {
     const skin = SKINS[Math.floor(Math.random() * SKINS.length)];
-    const modeConfig = SNAKE_MODES[selectedSnakeMode];
     const len = 8 + Math.floor(Math.random() * 20);
     const sx = Math.random() * (WORLD.w - 400) + 200;
     const sy = Math.random() * (WORLD.h - 400) + 200;
-    const isAggressive = Math.random() < 0.3;
+    const isAggressive = Math.random() < 0.25;
     const enemy = {
         name: 'Bot' + Math.floor(Math.random()*999), skin: skin, segments: [],
         radius: 10 + Math.random()*3, 
-        speed: modeConfig.enemySpeedBase + Math.random() * modeConfig.enemySpeedRange,
+        speed: 2 + Math.random()*0.8,
         angle: Math.random() * Math.PI * 2,
         targetX: Math.random()*WORLD.w, targetY: Math.random()*WORLD.h,
         retargetTimer: 0, alive: true,
@@ -1113,9 +1063,7 @@ function createEnemy() {
         attackMode: false, attackCooldown: 0,
         circleDirection: Math.random() > 0.5 ? 1 : -1,
         flankAngle: Math.random() * Math.PI * 2,
-        dodgeTimer: 0, boostTimer: 0,
-        lastPlayerDist: Infinity,
-        strafePhase: Math.random() * Math.PI * 2
+        boostTimer: 0, strafePhase: Math.random() * Math.PI * 2
     };
     for (let i = 0; i < len; i++) enemy.segments.push({ x: sx, y: sy + i*8 });
     enemies.push(enemy);
@@ -1175,6 +1123,7 @@ function updatePlayer() {
 }
 
 function updateEnemies() {
+    const updateRadius = 2500;
     if (!player || !player.alive) {
         enemies.forEach(enemy => {
             if (!enemy.alive) return;
@@ -1185,14 +1134,28 @@ function updateEnemies() {
         return;
     }
     const playerHead = player.segments[0];
-    let anyAttacking = false;
     enemies.forEach(enemy => {
         if (!enemy.alive) return;
         const eHead = enemy.segments[0];
         const distToPlayer = Math.hypot(playerHead.x - eHead.x, playerHead.y - eHead.y);
-        enemy.lastPlayerDist = distToPlayer;
+        
+        if (distToPlayer > updateRadius) {
+            enemy.retargetTimer++;
+            if (enemy.retargetTimer > 300) {
+                enemy.targetX = Math.random() * WORLD.w;
+                enemy.targetY = Math.random() * WORLD.h;
+                enemy.retargetTimer = 0;
+            }
+            const desiredAngle = Math.atan2(enemy.targetY - eHead.y, enemy.targetX - eHead.x);
+            let diff = desiredAngle - enemy.angle;
+            while (diff > Math.PI) diff -= Math.PI*2;
+            while (diff < -Math.PI) diff += Math.PI*2;
+            enemy.angle += diff * 0.05;
+            moveEnemy(enemy);
+            return;
+        }
+        
         if (enemy.attackCooldown > 0) enemy.attackCooldown--;
-        if (enemy.dodgeTimer > 0) enemy.dodgeTimer--;
         if (enemy.boostTimer > 0) enemy.boostTimer--;
         const enemyLength = enemy.segments.length;
         const playerLength = player.segments.length;
@@ -1200,9 +1163,9 @@ function updateEnemies() {
         const isNearPlayer = distToPlayer < 500;
         const isVeryNear = distToPlayer < 250;
         const playerHasFireOrShield = activePowers.fire || activePowers.shield;
+        
         if (enemy.aiType === 'aggressive' && isStronger && isNearPlayer && enemy.attackCooldown <= 0 && !playerHasFireOrShield) {
             enemy.attackMode = true;
-            anyAttacking = true;
             smartAttackBehavior(enemy, playerHead, distToPlayer);
         } else if (isVeryNear && !isStronger && !activePowers.ghost) {
             enemy.attackMode = false;
@@ -1212,7 +1175,6 @@ function updateEnemies() {
             fleeBehavior(enemy, playerHead);
         } else if (enemy.aiType === 'aggressive' && distToPlayer < 800 && isStronger && enemy.attackCooldown <= 0 && !playerHasFireOrShield) {
             enemy.attackMode = true;
-            anyAttacking = true;
             chaseBehavior(enemy, playerHead, distToPlayer);
         } else {
             enemy.attackMode = false;
@@ -1220,32 +1182,7 @@ function updateEnemies() {
         }
         moveEnemy(enemy);
         enemyEatFood(enemy);
-        enemies.forEach(other => {
-            if (other === enemy || !other.alive) return;
-            const otherHead = other.segments[0];
-            for (let i = 5; i < other.segments.length; i++) {
-                const seg = other.segments[i];
-                if (Math.hypot(eHead.x - seg.x, eHead.y - seg.y) < enemy.radius + other.radius - 5) {
-                    if (enemy.segments.length <= other.segments.length) {
-                        killBot(enemy);
-                    } else {
-                        killBot(other);
-                    }
-                    break;
-                }
-            }
-        });
     });
-    const warningEl = document.getElementById('aiWarning');
-    if (anyAttacking) {
-        aiAttackWarningTimer = 60;
-        warningEl.classList.add('active');
-    } else {
-        if (aiAttackWarningTimer > 0) {
-            aiAttackWarningTimer--;
-            if (aiAttackWarningTimer <= 0) warningEl.classList.remove('active');
-        }
-    }
 }
 
 function smartAttackBehavior(enemy, playerHead, dist) {
@@ -1304,14 +1241,6 @@ function smartWanderBehavior(enemy) {
         const d = Math.hypot(f.x - eHead.x, f.y - eHead.y);
         if (d < minDist) { minDist = d; target = f; }
     });
-    let nearestBottle = null, bottleDist = 400;
-    bottles.forEach(b => {
-        const d = Math.hypot(b.x - eHead.x, b.y - eHead.y);
-        if (d < bottleDist) { bottleDist = d; nearestBottle = b; }
-    });
-    if (nearestBottle && bottleDist < 200) {
-        target = nearestBottle;
-    }
     if (!target || enemy.retargetTimer > 300) {
         if (enemy.retargetTimer > 300) {
             enemy.targetX = Math.random() * (WORLD.w - 400) + 200;
@@ -1372,57 +1301,32 @@ function moveEnemy(enemy) {
 
 function enemyEatFood(enemy) {
     const head = enemy.segments[0];
-    const modeConfig = SNAKE_MODES[selectedSnakeMode];
     for (let i = foods.length - 1; i >= 0; i--) {
         const f = foods[i];
         if (Math.hypot(head.x - f.x, head.y - f.y) < enemy.radius + 10) {
             foods.splice(i, 1);
             if (!isMultiplayer || isHost) createFood();
-            const growBy = Math.max(1, Math.floor((f.fruit.points / 5) * modeConfig.growMultiplier));
+            const growBy = Math.floor(f.fruit.points / 5);
             for (let g = 0; g < growBy; g++) {
                 const tail = enemy.segments[enemy.segments.length-1];
                 enemy.segments.push({x: tail.x, y: tail.y});
             }
         }
     }
-    for (let i = bottles.length - 1; i >= 0; i--) {
-        const b = bottles[i];
-        if (Math.hypot(head.x - b.x, head.y - b.y) < enemy.radius + 15) {
-            bottles.splice(i, 1);
-            if (b.power.type === 'speed') enemy.boostTimer = 300;
-            else {
-                for (let g = 0; g < 3; g++) {
-                    const tail = enemy.segments[enemy.segments.length-1];
-                    enemy.segments.push({x: tail.x, y: tail.y});
-                }
-            }
-            setTimeout(() => { if (gameRunning) createBottle(); }, 20000);
-        }
-    }
-}
-
-function killBot(bot) {
-    if (!bot.alive) return;
-    bot.segments.forEach(s => foods.push({ x: s.x + (Math.random()-0.5)*20, y: s.y + (Math.random()-0.5)*20, fruit: FRUITS[Math.floor(Math.random()*FRUITS.length)], pulse: 0 }));
-    bot.alive = false;
-    setTimeout(createEnemy, 3000);
 }
 
 function checkCollisions() {
     if (!player.alive) return;
     const head = player.segments[0];
-    const modeConfig = SNAKE_MODES[selectedSnakeMode];
     for (let i = foods.length - 1; i >= 0; i--) {
         const f = foods[i];
         if (Math.hypot(head.x - f.x, head.y - f.y) < player.radius + 12) {
             let points = f.fruit.points;
-            points = Math.floor(points * modeConfig.scoreMultiplier);
             if (activePowers.score) points *= 2;
             score += points;
             foods.splice(i, 1);
             if (!isMultiplayer || isHost) createFood();
-            const baseGrow = Math.floor(f.fruit.points / 5);
-            const growBy = Math.max(1, Math.floor(baseGrow * modeConfig.growMultiplier));
+            const growBy = Math.floor(f.fruit.points / 5);
             for (let g = 0; g < growBy; g++) {
                 const tail = player.segments[player.segments.length-1];
                 player.segments.push({ x: tail.x, y: tail.y });
@@ -1488,12 +1392,6 @@ function killEnemy(enemy) {
     score += 100;
     totalKills++;
     document.getElementById('killsValue').textContent = totalKills;
-    enemies.forEach(e => {
-        if (e.alive && e.aiType === 'aggressive') {
-            const d = Math.hypot(e.segments[0].x - enemy.segments[0].x, e.segments[0].y - enemy.segments[0].y);
-            if (d < 400) e.attackCooldown = 300;
-        }
-    });
     setTimeout(createEnemy, 3000);
 }
 
@@ -1563,30 +1461,19 @@ function drawFruit(sx, sy, fruit, pulse) {
         ctx.shadowBlur = 0;
         ctx.fillStyle = fruit.leafColor;
         ctx.beginPath(); ctx.arc(0, -r*0.4, 4, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#fff';
-        for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.arc(Math.cos(i)*3, Math.sin(i)*3, 0.8, 0, Math.PI*2); ctx.fill(); }
     } else if (fruit.type === 'watermelon') {
         ctx.fillStyle = fruit.leafColor;
         ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.fill();
         ctx.fillStyle = '#ff3366';
         ctx.beginPath(); ctx.arc(0, 0, r-2, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#000';
-        for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.ellipse(Math.cos(i*2)*3, Math.sin(i*2)*3, 0.7, 1.5, 0, 0, Math.PI*2); ctx.fill(); }
     } else if (fruit.type === 'kiwi') {
         ctx.fillStyle = '#5d4037';
         ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.fill();
         ctx.fillStyle = fruit.color;
         ctx.beginPath(); ctx.arc(0, 0, r-2, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#000';
-        for (let i = 0; i < 6; i++) { const a = i * Math.PI * 2 / 6; ctx.beginPath(); ctx.arc(Math.cos(a)*4, Math.sin(a)*4, 0.5, 0, Math.PI*2); ctx.fill(); }
     } else if (fruit.type === 'mango') {
         ctx.fillStyle = fruit.color;
         ctx.beginPath(); ctx.ellipse(0, 0, r*0.8, r, 0, 0, Math.PI*2); ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = fruit.leafColor;
-        ctx.beginPath(); ctx.ellipse(2, -r+1, 3, 2, -0.5, 0, Math.PI*2); ctx.fill();
     }
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -1644,7 +1531,6 @@ function drawSnake(snake, isPlayer, isOnlinePlayer) {
     const hasGhost = isPlayer && activePowers.ghost;
     const hasFire = isPlayer && activePowers.fire;
     const hasShield = isPlayer && activePowers.shield;
-    const isAttacking = !isPlayer && !isOnlinePlayer && snake.attackMode;
     for (let i = snake.segments.length-1; i >= 0; i--) {
         const seg = snake.segments[i];
         const sx = seg.x - camera.x;
@@ -1653,7 +1539,6 @@ function drawSnake(snake, isPlayer, isOnlinePlayer) {
         let color = skin.body;
         if (color === 'rainbow') color = `hsl(${(i*15 + Date.now()/20) % 360}, 80%, 60%)`;
         if (hasFire) color = `hsl(${(Date.now()/5) % 60}, 100%, 50%)`;
-        if (isAttacking && i === 0) color = `hsl(${(Date.now()/3) % 30 + 350}, 100%, 50%)`;
         const r = snake.radius || 12;
         ctx.globalAlpha = hasGhost ? 0.5 : 1;
         ctx.fillStyle = skin.pattern;
@@ -1661,7 +1546,6 @@ function drawSnake(snake, isPlayer, isOnlinePlayer) {
         ctx.fillStyle = color;
         if (isPlayer) { ctx.shadowColor = hasFire ? '#ff6600' : color; ctx.shadowBlur = boostActive || hasFire ? 30 : 10; }
         else if (isOnlinePlayer) { ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 15; }
-        else if (isAttacking) { ctx.shadowColor = '#ff0000'; ctx.shadowBlur = 20; }
         ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
         ctx.shadowBlur = 0;
         if (i % 3 === 0 && i > 0) { ctx.fillStyle = skin.pattern; ctx.beginPath(); ctx.arc(sx, sy, r*0.4, 0, Math.PI*2); ctx.fill(); }
@@ -1670,18 +1554,6 @@ function drawSnake(snake, isPlayer, isOnlinePlayer) {
     const head = snake.segments[0];
     const hx = head.x - camera.x;
     const hy = head.y - camera.y;
-    if (isAttacking) {
-        ctx.strokeStyle = '#ff4444';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#ff0000';
-        ctx.shadowBlur = 15;
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.arc(hx, hy, (snake.radius||12) + 15, 0, Math.PI*2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.shadowBlur = 0;
-    }
     if (hasShield) {
         ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 3;
         ctx.shadowColor = '#00ff88'; ctx.shadowBlur = 20;
@@ -1698,18 +1570,16 @@ function drawSnake(snake, isPlayer, isOnlinePlayer) {
         const ey = hy + Math.sin(ang+side) * eo;
         ctx.fillStyle = '#fff';
         ctx.beginPath(); ctx.arc(ex, ey, r*0.4, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = isAttacking ? '#ff0000' : '#000';
+        ctx.fillStyle = '#000';
         ctx.beginPath(); ctx.arc(ex + Math.cos(ang)*2, ey + Math.sin(ang)*2, r*0.22, 0, Math.PI*2); ctx.fill();
     }
-    ctx.fillStyle = isOnlinePlayer ? '#ffd700' : isAttacking ? '#ff4444' : '#fff';
+    ctx.fillStyle = isOnlinePlayer ? '#ffd700' : '#fff';
     ctx.font = 'bold 14px Arial';
     ctx.textAlign = 'center';
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 3;
     const ny = hy - r - 12;
-    let label = snake.name;
-    if (isOnlinePlayer) label = '🌐 ' + label;
-    if (isAttacking) label = '⚔️ ' + label;
+    const label = isOnlinePlayer ? '🌐 ' + snake.name : snake.name;
     ctx.strokeText(label, hx, ny);
     ctx.fillText(label, hx, ny);
 }
@@ -1732,10 +1602,9 @@ function drawMiniMap() {
     });
     enemies.forEach(e => {
         if (!e.alive) return;
-        miniCtx.fillStyle = e.attackMode ? '#ff0000' : '#ff6666';
-        const dotSize = e.attackMode ? 2.5 : 1.5;
+        miniCtx.fillStyle = '#ff6666';
         miniCtx.beginPath();
-        miniCtx.arc(e.segments[0].x * sx, e.segments[0].y * sy, dotSize, 0, Math.PI*2);
+        miniCtx.arc(e.segments[0].x * sx, e.segments[0].y * sy, 1.5, 0, Math.PI*2);
         miniCtx.fill();
     });
     if (isMultiplayer) {
@@ -1823,11 +1692,9 @@ function gameOver() {
     document.getElementById('goLength').textContent = lengthM + ' m';
     document.getElementById('goKills').textContent = totalKills;
     document.getElementById('goTime').textContent = `${m}m ${s}s`;
-    document.getElementById('goMode').textContent = SNAKE_MODES[selectedSnakeMode].name;
     document.getElementById('goCoinsEarned').textContent = coinsEarned;
     renderFinalResults('goFinalResults');
     document.getElementById('gameOverOverlay').classList.add('active');
-    document.getElementById('aiWarning').classList.remove('active');
 }
 
 function winGame() {
@@ -1846,7 +1713,6 @@ function winGame() {
     document.getElementById('winScore').textContent = score;
     document.getElementById('winLength').textContent = lengthM + ' m';
     document.getElementById('winKills').textContent = totalKills;
-    document.getElementById('winMode').textContent = SNAKE_MODES[selectedSnakeMode].name;
     document.getElementById('winCoinsEarned').textContent = coinsEarned;
     const prizeSection = document.getElementById('prizeSection');
     const prizeText = document.getElementById('prizeText');
@@ -1859,7 +1725,6 @@ function winGame() {
     else if (map.prize === 'gold') { prizeSection.style.background = 'linear-gradient(45deg, #ffd700, #ff8800)'; prizeSection.style.color = '#000'; winTrophy.textContent = '🥇'; }
     renderFinalResults('winFinalResults');
     document.getElementById('winOverlay').classList.add('active');
-    document.getElementById('aiWarning').classList.remove('active');
 }
 
 function playAgain() {
@@ -1872,7 +1737,6 @@ function playAgain() {
 function goToMainMenu() {
     document.getElementById('gameOverOverlay').classList.remove('active');
     document.getElementById('winOverlay').classList.remove('active');
-    document.getElementById('aiWarning').classList.remove('active');
     if (timerInterval) clearInterval(timerInterval);
     gameRunning = false;
     activePowers = {};
@@ -1882,14 +1746,14 @@ function goToMainMenu() {
     showScreen('modeScreen');
 }
 
-// ===== TUTORIAL SYSTEM =====
+// ===== TUTORIAL =====
 let tutorialActive = false;
 let tutorialStep = 0;
 let tutorialTaskProgress = 0;
 let tutorialCheckInterval = null;
 const TOTAL_TUTORIAL_STEPS = 8;
-
 let tutorialSeen = localStorage.getItem('wormsTutorialSeen') === 'true';
+
 function updateTutBadge() {
     const badge = document.getElementById('tutNewBadge');
     if (badge) badge.style.display = tutorialSeen ? 'none' : 'inline';
@@ -1914,154 +1778,47 @@ function showTutorialStep(step) {
     const dots = generateDots(step);
     switch(step) {
         case 0:
-            box.innerHTML = `
-                <div class="tut-step">Step 1 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🎮 Welcome to Worms Zone!</div>
-                <div class="tut-text">
-                    Namaste! 🙏 Main tumhe sikhaunga ki ye game kaise khelte hain.<br><br>
-                    Tum ek <span class="highlight">snake</span> ho. Tumhara goal hai:
-                    <br>• 🍎 <span class="highlight">Fruits khao</span> aur bade bano
-                    <br>• 💀 <span class="warn">Enemies se bacho</span>
-                    <br>• ⏱️ <span class="gold">Time khatam hone tak survive karo!</span>
-                    <br>• ⚔️ Enemy snakes ko <span class="highlight">kill</span> karo
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn primary" onclick="showTutorialStep(1)">Start Learning ➜</button>
-                    <button class="tut-btn skip" onclick="endTutorial()">Skip Tutorial</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 1 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🎮 Welcome to Worms Zone!</div><div class="tut-text">Namaste! 🙏 Main tumhe sikhaunga ki ye game kaise khelte hain.<br><br>Tum ek <span class="highlight">snake</span> ho. Goal:<br>• 🍎 <span class="highlight">Fruits khao</span> aur bade bano<br>• 💀 <span class="warn">Enemies se bacho</span><br>• ⏱️ <span class="gold">Time tak survive karo!</span></div>${dots}<div class="tut-btns"><button class="tut-btn primary" onclick="showTutorialStep(1)">Start ➜</button><button class="tut-btn skip" onclick="endTutorial()">Skip</button></div>`;
             break;
         case 1:
-            box.innerHTML = `
-                <div class="tut-step">Step 2 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🕹️ Controls</div>
-                <div class="tut-text">Game ko control karne ke 2 tarike hain:</div>
-                <div class="tut-text" style="margin-bottom:5px;"><span class="highlight">📱 Mobile:</span></div>
-                <div class="tut-keys">
-                    <div class="tut-key"><span class="icon">◀</span>Left Button<br><span class="label">Left Turn</span></div>
-                    <div class="tut-key"><span class="icon">▶</span>Right Button<br><span class="label">Right Turn</span></div>
-                    <div class="tut-key"><span class="icon">🚀</span>Boost<br><span class="label">Speed Up</span></div>
-                </div>
-                <div class="tut-text" style="margin-bottom:5px;"><span class="highlight">💻 Laptop:</span></div>
-                <div class="tut-keys">
-                    <div class="tut-key"><span class="icon">🖱️</span>Mouse<br><span class="label">Direction</span></div>
-                    <div class="tut-key"><span class="icon">⬅️➡️</span>Arrow Keys<br><span class="label">Turn</span></div>
-                    <div class="tut-key"><span class="icon">Space</span>Spacebar<br><span class="label">Boost</span></div>
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn skip" onclick="showTutorialStep(0)">← Back</button>
-                    <button class="tut-btn primary" onclick="showTutorialStep(2)">Next ➜</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 2 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🕹️ Controls</div><div class="tut-text" style="margin-bottom:5px;"><span class="highlight">📱 Mobile:</span></div><div class="tut-keys"><div class="tut-key"><span class="icon">◀</span>Left<br><span class="label">Turn</span></div><div class="tut-key"><span class="icon">▶</span>Right<br><span class="label">Turn</span></div><div class="tut-key"><span class="icon">🚀</span>Boost<br><span class="label">Fast</span></div></div><div class="tut-text" style="margin-bottom:5px;"><span class="highlight">💻 Laptop:</span></div><div class="tut-keys"><div class="tut-key"><span class="icon">🖱️</span>Mouse<br><span class="label">Move</span></div><div class="tut-key"><span class="icon">⬅️➡️</span>Arrows<br><span class="label">Turn</span></div><div class="tut-key"><span class="icon">Space</span>Spacebar<br><span class="label">Boost</span></div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(0)">← Back</button><button class="tut-btn primary" onclick="showTutorialStep(2)">Next ➜</button></div>`;
             break;
         case 2:
             box.className = 'tutorial-box top';
             startTutorialGame();
-            box.innerHTML = `
-                <div class="tut-step">Step 3 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🐍 Movement Practice!</div>
-                <div class="tut-text">
-                    Ab apne snake ko <span class="highlight">move</span> karo!<br>
-                    Mobile pe <span class="highlight">◀ ▶ buttons</span> use karo.<br>
-                    Laptop pe <span class="highlight">mouse ya arrow keys</span> use karo.
-                </div>
-                <div class="tut-task">
-                    🎯 TASK: Move around for 5 seconds!
-                    <div class="task-progress" id="tutTaskDisplay">⏱️ 5s</div>
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn skip" onclick="endTutorial()">Skip</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 3 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🐍 Move!</div><div class="tut-text">Snake ko <span class="highlight">move</span> karo!</div><div class="tut-task">🎯 Move for 5 seconds!<div class="task-progress" id="tutTaskDisplay">⏱️ 5s</div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="endTutorial()">Skip</button></div>`;
             tutorialTaskProgress = 5;
             if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
             tutorialCheckInterval = setInterval(() => {
                 tutorialTaskProgress--;
                 const display = document.getElementById('tutTaskDisplay');
                 if (display) display.textContent = `⏱️ ${tutorialTaskProgress}s`;
-                if (tutorialTaskProgress <= 0) {
-                    clearInterval(tutorialCheckInterval);
-                    showTutorialStep(3);
-                }
+                if (tutorialTaskProgress <= 0) { clearInterval(tutorialCheckInterval); showTutorialStep(3); }
             }, 1000);
             break;
         case 3:
             box.className = 'tutorial-box top';
             tutorialTaskProgress = 0;
-            box.innerHTML = `
-                <div class="tut-step">Step 4 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🍎 Fruit Collection!</div>
-                <div class="tut-text">
-                    Map pe bohot saare <span class="highlight">fruits</span> hain.<br>
-                    Inhe khaane se tumhara snake <span class="highlight">bada</span> hoga aur <span class="gold">score badhega</span>!<br><br>
-                    🍎 Apple = 10pts &nbsp; 🍇 Grape = 15pts<br>
-                    🍉 Watermelon = 20pts &nbsp; 🥭 Mango = 18pts
-                </div>
-                <div class="tut-task">
-                    🎯 TASK: Collect 5 fruits!
-                    <div class="task-progress" id="tutTaskDisplay">0 / 5 🍎</div>
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn skip" onclick="endTutorial()">Skip</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 4 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🍎 Collect Fruits!</div><div class="tut-text">Fruits khao - score badhega aur snake bada hoga!<br><br>🍎 Apple=10 🍇 Grape=15 🍉 Watermelon=20</div><div class="tut-task">🎯 Collect 5 fruits!<div class="task-progress" id="tutTaskDisplay">0 / 5 🍎</div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="endTutorial()">Skip</button></div>`;
             if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
             tutorialCheckInterval = setInterval(() => {
                 const display = document.getElementById('tutTaskDisplay');
                 if (display) display.textContent = `${tutorialTaskProgress} / 5 🍎`;
-                if (tutorialTaskProgress >= 5) {
-                    clearInterval(tutorialCheckInterval);
-                    showTutorialStep(4);
-                }
+                if (tutorialTaskProgress >= 5) { clearInterval(tutorialCheckInterval); showTutorialStep(4); }
             }, 300);
             break;
         case 4:
             box.className = 'tutorial-box center';
-            box.innerHTML = `
-                <div class="tut-step">Step 5 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🍾 Power-Up Bottles!</div>
-                <div class="tut-text">
-                    Map pe <span class="highlight">glowing bottles</span> milenge. Inhe uthao toh special powers milti hain!
-                </div>
-                <div class="tut-powerlist">
-                    <div class="tut-poweritem" style="color:#00ccff;"><span class="p-icon">⚡</span><span class="p-name">Speed</span><span class="p-desc">30s fast move</span></div>
-                    <div class="tut-poweritem" style="color:#00ff88;"><span class="p-icon">🛡️</span><span class="p-name">Shield</span><span class="p-desc">1 hit protection</span></div>
-                    <div class="tut-poweritem" style="color:#ffd700;"><span class="p-icon">🧲</span><span class="p-name">Magnet</span><span class="p-desc">Attract food</span></div>
-                    <div class="tut-poweritem" style="color:#ff4444;"><span class="p-icon">🔥</span><span class="p-name">Fire</span><span class="p-desc">Kill on touch</span></div>
-                    <div class="tut-poweritem" style="color:#aa44ff;"><span class="p-icon">👻</span><span class="p-name">Ghost</span><span class="p-desc">Pass through</span></div>
-                    <div class="tut-poweritem" style="color:#ff8800;"><span class="p-icon">💎</span><span class="p-name">2X Score</span><span class="p-desc">Double points</span></div>
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn skip" onclick="showTutorialStep(3)">← Back</button>
-                    <button class="tut-btn primary" onclick="showTutorialStep(5)">Next ➜</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 5 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🍾 Power-Ups!</div><div class="tut-text">Glowing bottles uthao for special powers!</div><div class="tut-powerlist"><div class="tut-poweritem" style="color:#00ccff;"><span class="p-icon">⚡</span><span class="p-name">Speed</span><span class="p-desc">30s fast</span></div><div class="tut-poweritem" style="color:#00ff88;"><span class="p-icon">🛡️</span><span class="p-name">Shield</span><span class="p-desc">1 hit save</span></div><div class="tut-poweritem" style="color:#ffd700;"><span class="p-icon">🧲</span><span class="p-name">Magnet</span><span class="p-desc">Attract food</span></div><div class="tut-poweritem" style="color:#ff4444;"><span class="p-icon">🔥</span><span class="p-name">Fire</span><span class="p-desc">Kill touch</span></div><div class="tut-poweritem" style="color:#aa44ff;"><span class="p-icon">👻</span><span class="p-name">Ghost</span><span class="p-desc">Pass through</span></div><div class="tut-poweritem" style="color:#ff8800;"><span class="p-icon">💎</span><span class="p-name">2X</span><span class="p-desc">Double pts</span></div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(3)">← Back</button><button class="tut-btn primary" onclick="showTutorialStep(5)">Next ➜</button></div>`;
             break;
         case 5:
             box.className = 'tutorial-box bottom';
-            box.innerHTML = `
-                <div class="tut-step">Step 6 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🚀 Boost System!</div>
-                <div class="tut-text">
-                    <span class="highlight">Boost</span> dabane se snake <span class="highlight">2x fast</span> ho jata hai!<br><br>
-                    ⏱️ Boost <span class="gold">3 seconds</span> chalta hai<br>
-                    ⏳ Phir <span class="warn">10 seconds cooldown</span> lagta hai<br><br>
-                    💻 Laptop: <span class="highlight">Spacebar</span> dabao<br>
-                    📱 Mobile: <span class="highlight">🚀 Button</span> dabao
-                </div>
-                <div class="tut-task">
-                    🎯 TRY IT: Press Boost button now!
-                    <div class="task-progress" id="tutTaskDisplay">Waiting... 🚀</div>
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn skip" onclick="showTutorialStep(6)">Skip ➜</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 6 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🚀 Boost!</div><div class="tut-text">Boost = 2x speed for 3 sec<br>Cooldown: 10 sec<br>💻 Spacebar | 📱 🚀 Button</div><div class="tut-task">🎯 Try Boost!<div class="task-progress" id="tutTaskDisplay">Waiting... 🚀</div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(6)">Skip ➜</button></div>`;
             if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
             tutorialCheckInterval = setInterval(() => {
                 if (boostActive) {
                     const display = document.getElementById('tutTaskDisplay');
-                    if (display) display.textContent = '✅ Great! Boost Active!';
+                    if (display) display.textContent = '✅ Boost Active!';
                     clearInterval(tutorialCheckInterval);
                     setTimeout(() => showTutorialStep(6), 2000);
                 }
@@ -2069,48 +1826,12 @@ function showTutorialStep(step) {
             break;
         case 6:
             box.className = 'tutorial-box top';
-            box.innerHTML = `
-                <div class="tut-step">Step 7 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">⚔️ Enemies & Danger!</div>
-                <div class="tut-text">
-                    Map pe <span class="warn">AI Bots</span> hain. Ye dangerous hain!<br><br>
-                    <span class="warn">❌ DEATH:</span><br>
-                    • Enemy ke <span class="warn">body me headbutt</span> = GAME OVER<br>
-                    • <span class="warn">Map border</span> se bahar jana = GAME OVER<br><br>
-                    <span class="highlight">✅ KILL ENEMY:</span><br>
-                    • Enemy ka head tumhare <span class="highlight">body me lage</span> = Enemy dies!<br>
-                    • <span class="gold">🔥 Fire power</span> se touch karo = Instant kill!<br><br>
-                    <span class="warn">⚔️ Some bots are AGGRESSIVE!</span><br>
-                    • Red eyes wale bots tumpe <span class="warn">attack</span> karte hain!<br>
-                    • ⚠️ Warning dikhega jab attack ho raha ho
-                </div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn skip" onclick="showTutorialStep(5)">← Back</button>
-                    <button class="tut-btn primary" onclick="showTutorialStep(7)">Next ➜</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 7 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">⚔️ Enemies!</div><div class="tut-text"><span class="warn">❌ DEATH:</span><br>• Enemy body me headbutt = GAME OVER<br>• Map border = GAME OVER<br><br><span class="highlight">✅ KILL:</span><br>• Enemy head tumhare body me lage = Enemy dies!<br>• 🔥 Fire power touch = Instant kill!</div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(5)">← Back</button><button class="tut-btn primary" onclick="showTutorialStep(7)">Next ➜</button></div>`;
             break;
         case 7:
             box.className = 'tutorial-box center';
             stopTutorialGame();
-            box.innerHTML = `
-                <div class="tut-step">Step 8 of ${TOTAL_TUTORIAL_STEPS}</div>
-                <div class="tut-title">🎉 Tutorial Complete!</div>
-                <div class="tut-text" style="font-size:15px;">
-                    Bahut accha! Ab tum ready ho! 💪<br><br>
-                    <span class="gold">🏆 Pro Tips:</span><br>
-                    • 🐢 Pehle <span class="highlight">Slow Mode</span> try karo<br>
-                    • 🛡️ <span class="highlight">Shield</span> pehle uthao - life bacha sakta hai<br>
-                    • 🧲 <span class="highlight">Magnet</span> se fast food collect karo<br>
-                    • ⚔️ Bade snake ke <span class="highlight">aage se</span> guzro toh enemy mar jayega<br>
-                    • 🗺️ <span class="highlight">Minimap</span> dekhte raho - red dots enemies hain<br>
-                    • 💰 <span class="gold">Extreme Mode</span> me 1.5x coins milte hain!
-                </div>
-                <div style="font-size:50px; margin:15px 0; text-align:center;">🏆🐍🎮</div>
-                ${dots}
-                <div class="tut-btns">
-                    <button class="tut-btn success" onclick="endTutorial()">🎮 Let's Play!</button>
-                </div>`;
+            box.innerHTML = `<div class="tut-step">Step 8 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🎉 Complete!</div><div class="tut-text">Ready ho! 💪<br><br><span class="gold">🏆 Tips:</span><br>• 🛡️ Shield pehle uthao<br>• 🧲 Magnet se fast collect<br>• 🗺️ Minimap dekhte raho</div><div style="font-size:50px; margin:15px 0; text-align:center;">🏆🐍🎮</div>${dots}<div class="tut-btns"><button class="tut-btn success" onclick="endTutorial()">🎮 Let's Play!</button></div>`;
             break;
     }
 }
@@ -2139,14 +1860,12 @@ function startTutorialGame() {
     document.getElementById('mapName').textContent = '📖 Tutorial';
     document.getElementById('playerNameDisplay').textContent = playerName || 'Player';
     document.getElementById('killsValue').textContent = '0';
-    document.getElementById('growthBadge').textContent = '📖 Tutorial Mode';
     const skin = SKINS[selectedSkin];
-    player = { name: playerName || 'Player', skin: skin, segments: [], radius: 12, speed: 3.5, angle: 0, alive: true };
+    player = { name: playerName || 'Player', skin: skin, segments: [], radius: 12, speed: 4, angle: 0, alive: true };
     for (let i = 0; i < 10; i++) player.segments.push({ x: WORLD.w/2, y: WORLD.h/2 + i*8 });
     foods = []; for (let i = 0; i < 200; i++) createFood();
     bottles = []; for (let i = 0; i < 20; i++) createBottle();
     enemies = []; 
-    selectedSnakeMode = 'slow';
     for (let i = 0; i < 10; i++) createEnemy();
     gameRunning = true;
     gameStartTime = Date.now();
@@ -2179,8 +1898,20 @@ function endTutorial() {
 
 document.getElementById('nameInput').addEventListener('keypress', e => { if (e.key === 'Enter') submitName(); });
 document.getElementById('joinCodeInput').addEventListener('keypress', e => { if (e.key === 'Enter') joinRoom(); });
+
+// AUTO-LOAD SAVED NAME ON STARTUP
+window.addEventListener('load', () => {
+    const savedName = localStorage.getItem('wormsPlayerName');
+    if (savedName) {
+        playerName = savedName;
+        document.getElementById('welcomeName').textContent = playerName;
+        updateCoinDisplay();
+        showScreen('modeScreen');
+    }
+    updateTutBadge();
+});
+
 updateCoinDisplay();
-setTimeout(updateTutBadge, 100);
 </script>
 </body>
 </html>
