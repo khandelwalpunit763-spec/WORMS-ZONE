@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>🐍 Worms Zone - Cosmic Edition</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#00ff88">
+<meta name="theme-color" content="#000000">
 <meta name="screen-orientation" content="landscape">
 <meta name="x5-orientation" content="landscape">
 <meta name="x5-fullscreen" content="true">
@@ -15,12 +15,26 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
-  });
-}
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4q5Rd0mmgoZEnSvCHD9_ofobNSCLRky0",
+    authDomain: "worms-zone-c95c4.firebaseapp.com",
+    databaseURL: "https://worms-zone-c95c4-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "worms-zone-c95c4",
+    storageBucket: "worms-zone-c95c4.firebasestorage.app",
+    messagingSenderId: "476218073641",
+    appId: "1:476218073641:web:b94021ad88e528df00b238"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  window.fbDB = db;
+  window.fbRef = ref;
+  window.fbSet = set;
+  window.fbGet = get;
+  window.fbReady = true;
+  console.log('🔥 Firebase Connected!');
 </script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -84,15 +98,14 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .error-msg { color: #ff4444; font-size: 14px; margin: 10px 0; text-align: center; }
 
 #leaderboardScreen { justify-content: flex-start !important; padding-top: 20px !important; }
-#leaderboardScreen h2 { margin-top: 10px; margin-bottom: 15px; }
 .leaderboard-container { background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border: 2px solid rgba(0,255,255,0.4); border-radius: 25px; padding: 20px; max-width: 700px; width: 95%; max-height: 65vh; overflow-y: auto; margin: 0 auto; }
+.lb-mode-tabs { display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; }
+.lb-mode-tab { padding: 12px 25px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.2); border-radius: 25px; cursor: pointer; font-size: 14px; font-weight: bold; color: white; transition: all 0.3s; }
+.lb-mode-tab.active { background: linear-gradient(45deg, #00ff88, #00ffaa); color: #000; border-color: #00ff88; box-shadow: 0 0 20px rgba(0,255,136,0.5); }
 .lb-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
 .lb-tab { padding: 10px 18px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; cursor: pointer; font-size: 13px; transition: all 0.3s; color: white; font-weight: bold; }
-.lb-tab:hover { background: rgba(0,255,255,0.2); }
 .lb-tab.active { background: linear-gradient(45deg, #00ffff, #0066ff); color: #000; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.6); }
-.lb-table { width: 100%; }
 .lb-row { display: grid; grid-template-columns: 50px 1fr 80px 60px 60px; gap: 10px; padding: 12px 15px; background: rgba(0,0,0,0.4); margin: 6px 0; border-radius: 12px; align-items: center; font-size: 14px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
-.lb-row:hover { background: rgba(0,255,255,0.1); transform: translateX(5px); }
 .lb-row.gold { background: linear-gradient(90deg, rgba(255,215,0,0.2), rgba(0,0,0,0.4)); border-color: #ffd700; }
 .lb-row.silver { background: linear-gradient(90deg, rgba(192,192,192,0.2), rgba(0,0,0,0.4)); border-color: #c0c0c0; }
 .lb-row.bronze { background: linear-gradient(90deg, rgba(205,127,50,0.2), rgba(0,0,0,0.4)); border-color: #cd7f32; }
@@ -101,12 +114,24 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .lb-name { font-weight: bold; color: #00ffff; }
 .lb-val { text-align: center; color: #fff; font-weight: bold; }
 .lb-empty { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); }
+.lb-loading { text-align: center; padding: 30px; color: #00ffff; font-size: 16px; }
 .my-stats { background: rgba(0,255,136,0.1); border: 2px solid #00ff88; border-radius: 15px; padding: 15px; margin-top: 20px; }
 .my-stats h3 { color: #00ff88; margin-bottom: 10px; text-align: center; font-size: 16px; }
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 13px; }
 .stat-item { background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; text-align: center; }
 .stat-item .lbl { font-size: 10px; color: rgba(255,255,255,0.6); }
 .stat-item .val { font-size: 16px; color: #00ffff; font-weight: bold; }
+
+.settings-container { background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border: 2px solid rgba(0,255,255,0.4); border-radius: 25px; padding: 25px; max-width: 500px; width: 95%; }
+.settings-row { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; margin: 10px 0; border: 1px solid rgba(0,255,255,0.2); }
+.settings-row h3 { color: #00ffff; font-size: 16px; margin-bottom: 12px; }
+.control-options { display: flex; gap: 10px; flex-wrap: wrap; }
+.control-option { flex: 1; min-width: 140px; padding: 15px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.2); border-radius: 15px; cursor: pointer; text-align: center; transition: all 0.3s; }
+.control-option:hover { border-color: #00ffff; transform: translateY(-3px); }
+.control-option.selected { border-color: #00ff88; background: rgba(0,255,136,0.1); box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+.control-option .ico { font-size: 35px; margin-bottom: 8px; }
+.control-option .nm { font-size: 13px; font-weight: bold; color: #fff; }
+.control-option .desc { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
 
 #gameScreen { padding: 0; }
 #gameCanvas { display: block; background: #0a0a1a; cursor: crosshair; touch-action: none; }
@@ -131,16 +156,12 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .hud-row { margin-bottom: 6px; }
 .hud-label { font-size: 10px; color: rgba(255,255,255,0.6); }
 .hud-value { font-size: 16px; font-weight: bold; color: #00ffff; }
-.live-ranking { margin-top: 10px; padding-top: 10px; border-top: 2px solid rgba(255,215,0,0.4); }
-.live-ranking-title { font-size: 11px; color: #ffd700; font-weight: bold; text-align: center; margin-bottom: 8px; letter-spacing: 1px; }
-.rank-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; margin: 3px 0; background: rgba(0,0,0,0.4); border-radius: 8px; font-size: 12px; transition: all 0.3s; }
-.rank-row.you { background: linear-gradient(90deg, rgba(0,255,136,0.3), rgba(0,0,0,0.4)); border: 1px solid #00ff88; box-shadow: 0 0 10px rgba(0,255,136,0.4); }
-.rank-row.first { background: linear-gradient(90deg, rgba(255,215,0,0.25), rgba(0,0,0,0.4)); border: 1px solid #ffd700; }
-.rank-row.second { background: linear-gradient(90deg, rgba(192,192,192,0.2), rgba(0,0,0,0.4)); }
-.rank-row.third { background: linear-gradient(90deg, rgba(205,127,50,0.2), rgba(0,0,0,0.4)); }
-.rank-pos { font-weight: bold; min-width: 25px; }
-.rank-name { flex: 1; padding: 0 6px; color: #fff; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
-.rank-score { color: #00ffff; font-weight: bold; font-size: 11px; }
+.my-rank-box { margin-top: 10px; padding-top: 10px; border-top: 2px solid rgba(255,215,0,0.4); text-align: center; }
+.my-rank-title { font-size: 11px; color: #ffd700; font-weight: bold; margin-bottom: 8px; letter-spacing: 1px; }
+.my-rank-display { background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,0,0,0.4)); border: 2px solid #00ff88; border-radius: 12px; padding: 10px; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+.my-rank-num { font-size: 24px; font-weight: bold; color: #00ff88; }
+.my-rank-text { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
 #activePowers { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 15; flex-wrap: wrap; justify-content: center; max-width: 90%; }
 .power-badge { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); border: 2px solid #fff; border-radius: 25px; padding: 6px 14px; display: flex; align-items: center; gap: 6px; font-weight: bold; font-size: 14px; animation: powerPulse 1s infinite; }
 @keyframes powerPulse { 50% { box-shadow: 0 0 20px currentColor; transform: scale(1.05); } }
@@ -150,6 +171,7 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .power-badge.fire { border-color: #ff4444; color: #ff4444; }
 .power-badge.ghost { border-color: #aa44ff; color: #aa44ff; }
 .power-badge.score { border-color: #ff8800; color: #ff8800; }
+
 #gameControls { position: fixed; bottom: 20px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 20; pointer-events: none; }
 .ctrl-side { display: flex; gap: 15px; pointer-events: auto; }
 .ctrl-btn { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #fff; color: white; font-size: 32px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; touch-action: none; box-shadow: 0 8px 25px rgba(0,0,0,0.6); transition: transform 0.1s; }
@@ -160,6 +182,14 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .ctrl-btn.boost.active { background: radial-gradient(circle, #ffd700, #ff8800); box-shadow: 0 0 40px #ffd700; animation: boostPulse 0.3s infinite; }
 @keyframes boostPulse { 50% { transform: scale(1.15); } }
 .cooldown-text { font-size: 26px !important; }
+
+#joystickContainer { position: fixed; bottom: 30px; left: 30px; width: 140px; height: 140px; z-index: 20; pointer-events: auto; display: none; }
+#joystickContainer.active { display: block; }
+#joystickBase { position: absolute; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(0,255,255,0.15), rgba(0,0,0,0.4)); border: 3px solid rgba(0,255,255,0.5); box-shadow: 0 0 25px rgba(0,255,255,0.4); touch-action: none; }
+#joystickHandle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #00ffff, #0066ff); border: 3px solid #fff; box-shadow: 0 5px 20px rgba(0,255,255,0.7); pointer-events: none; transition: transform 0.05s; }
+
+.arrow-controls.hidden { display: none !important; }
+
 .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 100; padding: 15px; overflow-y: auto; }
 .overlay.active { display: flex; }
 .overlay-box { background: linear-gradient(135deg, rgba(26,26,46,0.95), rgba(22,33,62,0.95)); padding: 30px; border-radius: 25px; text-align: center; border: 3px solid rgba(0,255,255,0.5); max-width: 480px; width: 100%; box-shadow: 0 0 60px rgba(0,255,255,0.4); }
@@ -173,13 +203,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .stat-row .value { color: #00ffff; font-weight: bold; }
 .reward-box { background: linear-gradient(135deg, #ffd700, #ff8800); color: #000; padding: 15px; border-radius: 15px; margin: 12px 0; font-weight: bold; }
 .reward-box .big { font-size: 24px; margin: 8px 0; }
-.final-results { background: rgba(0,0,0,0.5); border: 2px solid rgba(255,215,0,0.4); border-radius: 15px; padding: 15px; margin: 12px 0; }
-.final-results h3 { color: #ffd700; font-size: 16px; margin-bottom: 10px; text-align: center; }
-.fr-row { display: flex; justify-content: space-between; padding: 6px 10px; margin: 4px 0; background: rgba(0,0,0,0.4); border-radius: 8px; font-size: 13px; }
-.fr-row.you { background: rgba(0,255,136,0.2); border: 1px solid #00ff88; }
-.fr-row .pos { font-weight: bold; min-width: 25px; }
-.fr-row .nm { flex: 1; color: #00ffff; font-weight: bold; }
-.fr-row .sc { color: #ffd700; font-weight: bold; }
 #loadingScreen { background: rgba(0,0,0,0.95); }
 .spinner { border: 8px solid rgba(0,255,255,0.1); border-top: 8px solid #00ffff; border-right: 8px solid #ff00ff; border-radius: 50%; width: 80px; height: 80px; animation: rotate 1s linear infinite; margin: 20px; }
 @keyframes rotate { 100% { transform: rotate(360deg); } }
@@ -191,51 +214,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
 .creator-name { background: linear-gradient(45deg, #ffd700, #ff00ff, #00ffff, #ffd700); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 18px; letter-spacing: 2px; animation: nameGlow 3s linear infinite; }
 @keyframes nameGlow { 100% { background-position: 300% 0%; } }
 @keyframes creditGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,0,255,0.5); } }
-.tutorial-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200; display: none; pointer-events: none; }
-.tutorial-overlay.active { display: block; }
-.tutorial-dim { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); pointer-events: auto; }
-.tutorial-box { position: fixed; background: linear-gradient(135deg, rgba(10,10,40,0.97), rgba(20,30,60,0.97)); border: 3px solid #00ffff; border-radius: 25px; padding: 25px 30px; max-width: 420px; width: 90%; z-index: 210; box-shadow: 0 0 60px rgba(0,255,255,0.5), inset 0 0 30px rgba(0,255,255,0.1); pointer-events: auto; animation: tutorialPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-.tutorial-box.center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.tutorial-box.top { top: 15px; left: 50%; transform: translateX(-50%); }
-.tutorial-box.bottom { bottom: 130px; left: 50%; transform: translateX(-50%); }
-@keyframes tutorialPop { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
-.tutorial-box.top { animation-name: tutorialPopTop; }
-@keyframes tutorialPopTop { 0% { transform: translateX(-50%) scale(0.5); opacity: 0; } 100% { transform: translateX(-50%) scale(1); opacity: 1; } }
-.tutorial-box.bottom { animation-name: tutorialPopBottom; }
-@keyframes tutorialPopBottom { 0% { transform: translateX(-50%) scale(0.5); opacity: 0; } 100% { transform: translateX(-50%) scale(1); opacity: 1; } }
-.tut-step { font-size: 11px; color: #ffd700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-weight: bold; }
-.tut-title { font-size: 22px; font-weight: 900; color: #00ffff; margin-bottom: 10px; }
-.tut-text { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 15px; }
-.tut-text .highlight { color: #00ff88; font-weight: bold; }
-.tut-text .warn { color: #ff4444; font-weight: bold; }
-.tut-text .gold { color: #ffd700; font-weight: bold; }
-.tut-keys { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 12px 0; }
-.tut-key { background: rgba(0,0,0,0.6); border: 2px solid #00ffff; border-radius: 12px; padding: 10px 16px; text-align: center; font-size: 13px; color: #fff; min-width: 80px; }
-.tut-key .icon { font-size: 24px; display: block; margin-bottom: 4px; }
-.tut-key .label { font-size: 10px; color: rgba(255,255,255,0.6); }
-.tut-progress { display: flex; gap: 6px; justify-content: center; margin: 15px 0 10px; }
-.tut-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s; }
-.tut-dot.active { background: #00ffff; box-shadow: 0 0 10px #00ffff; transform: scale(1.3); }
-.tut-dot.done { background: #00ff88; }
-.tut-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-.tut-btn { padding: 12px 28px; font-size: 14px; font-weight: bold; border: none; border-radius: 25px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-.tut-btn.primary { background: linear-gradient(135deg, #00ffff, #0066ff); color: #000; box-shadow: 0 4px 15px rgba(0,255,255,0.5); }
-.tut-btn.primary:hover { transform: translateY(-2px) scale(1.05); }
-.tut-btn.skip { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); }
-.tut-btn.skip:hover { background: rgba(255,255,255,0.2); }
-.tut-btn.success { background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; box-shadow: 0 4px 15px rgba(0,255,136,0.5); }
-.tut-task { background: rgba(0,0,0,0.5); border: 2px solid #ffd700; border-radius: 15px; padding: 12px 18px; margin: 12px 0; text-align: center; font-size: 14px; color: #ffd700; font-weight: bold; animation: taskPulse 2s infinite; }
-@keyframes taskPulse { 50% { box-shadow: 0 0 20px rgba(255,215,0,0.4); } }
-.tut-task .task-progress { font-size: 20px; color: #00ffff; margin-top: 5px; }
-.tut-powerlist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0; }
-.tut-poweritem { background: rgba(0,0,0,0.5); border: 1px solid currentColor; border-radius: 10px; padding: 8px; font-size: 11px; text-align: center; }
-.tut-poweritem .p-icon { font-size: 20px; }
-.tut-poweritem .p-name { font-weight: bold; display: block; margin: 3px 0; }
-.tut-poweritem .p-desc { color: rgba(255,255,255,0.6); font-size: 10px; }
-.tutorial-float-btn { position: relative; display: inline-block; margin-top: 10px; }
-.tutorial-float-btn .new-badge { position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; animation: badgePulse 1s infinite; }
-@keyframes badgePulse { 50% { transform: scale(1.1); } }
-
 .name-display { position: fixed; top: 15px; left: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 20px; font-size: 13px; z-index: 50; border: 2px solid rgba(0,255,255,0.4); display: none; }
 .name-display.show { display: block; }
 .name-display strong { color: #00ffff; }
@@ -264,32 +242,61 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <div class="mode-card" onclick="selectMode('create')"><div class="mode-icon">🌐</div><h3>CREATE ROOM</h3><p>Host Online Match</p></div>
         <div class="mode-card" onclick="selectMode('join')"><div class="mode-icon">🔗</div><h3>JOIN ROOM</h3><p>Enter Friend's Code</p></div>
         <div class="mode-card" onclick="showLeaderboard()"><div class="mode-icon">🏆</div><h3>LEADERBOARD</h3><p>View Top Players</p></div>
+        <div class="mode-card" onclick="showScreen('settingsScreen')"><div class="mode-icon">⚙️</div><h3>SETTINGS</h3><p>Controls & More</p></div>
     </div>
-    <div class="tutorial-float-btn">
-        <button class="btn gold" onclick="startTutorial()">📖 TUTORIAL</button>
-        <span class="new-badge" id="tutNewBadge">NEW</span>
+</div>
+
+<div id="settingsScreen" class="screen">
+    <h2>⚙️ SETTINGS</h2>
+    <div class="settings-container">
+        <div class="settings-row">
+            <h3>🎮 Control Type</h3>
+            <div class="control-options">
+                <div class="control-option" id="ctrlOptArrows" onclick="selectControlType('arrows')">
+                    <div class="ico">◀ ▶</div>
+                    <div class="nm">ARROW BUTTONS</div>
+                    <div class="desc">Left & Right turn</div>
+                </div>
+                <div class="control-option" id="ctrlOptJoystick" onclick="selectControlType('joystick')">
+                    <div class="ico">🕹️</div>
+                    <div class="nm">JOYSTICK</div>
+                    <div class="desc">360° rotation</div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-row">
+            <h3>👤 Player Name</h3>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 10px; font-size: 14px;">Current: <strong id="currentNameDisplay" style="color: #00ffff;">-</strong></p>
+            <button class="btn small" onclick="changeName()">📝 CHANGE NAME</button>
+        </div>
+        <div class="settings-row">
+            <h3>🗑️ Clear Data</h3>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 10px; font-size: 14px;">Reset all local records (Global stats safe)</p>
+            <button class="btn danger small" onclick="clearLocalData()">🗑️ CLEAR LOCAL DATA</button>
+        </div>
     </div>
+    <button class="btn secondary" onclick="showScreen('modeScreen')" style="margin-top: 15px;">← BACK</button>
 </div>
 
 <div id="leaderboardScreen" class="screen">
     <h2>🏆 LEADERBOARD</h2>
     <div class="leaderboard-container">
+        <div class="lb-mode-tabs">
+            <div class="lb-mode-tab active" id="lbModeGlobal" onclick="switchLBMode('global')">🌐 GLOBAL TOP 10</div>
+            <div class="lb-mode-tab" id="lbModeLocal" onclick="switchLBMode('local')">💾 LOCAL</div>
+        </div>
         <div class="lb-tabs">
             <div class="lb-tab active" onclick="switchLBTab('score', this)">🏆 BEST SCORE</div>
             <div class="lb-tab" onclick="switchLBTab('kills', this)">💀 TOP KILLS</div>
             <div class="lb-tab" onclick="switchLBTab('coins', this)">💰 RICHEST</div>
-            <div class="lb-tab" onclick="switchLBTab('time', this)">⏱️ SURVIVAL</div>
         </div>
         <div id="lbTable" class="lb-table"></div>
-        <div class="my-stats" id="myStatsBox">
+        <div class="my-stats" id="myStatsBox" style="display:none;">
             <h3>📊 YOUR STATS</h3>
             <div class="stats-grid" id="myStatsGrid"></div>
         </div>
     </div>
-    <div style="margin-top: 15px;">
-        <button class="btn danger small" onclick="clearLeaderboard()">🗑️ CLEAR ALL</button>
-        <button class="btn secondary" onclick="showScreen('modeScreen')">← BACK</button>
-    </div>
+    <button class="btn secondary" onclick="showScreen('modeScreen')" style="margin-top: 15px;">← BACK</button>
 </div>
 
 <div id="joinScreen" class="screen">
@@ -304,15 +311,15 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
     <h2>🗺️ SELECT MAP</h2>
     <div class="map-container">
         <div class="map-card" onclick="selectMap('small', this)">
-            <div class="map-icon">🟢</div><h3>Small</h3><p>⏱️ 15 Min</p><p>📏 7500x6000</p><p>🐛 80 Bots</p><p>🍾 80 Bottles</p>
+            <div class="map-icon">🟢</div><h3>Small</h3><p>⏱️ 15 Min</p><p>🐛 80 Bots</p>
             <div class="prize-badge bronze">🥉 +200 + Coins</div>
         </div>
         <div class="map-card" onclick="selectMap('medium', this)">
-            <div class="map-icon">🟡</div><h3>Medium</h3><p>⏱️ 20 Min</p><p>📏 12500x10000</p><p>🐛 120 Bots</p><p>🍾 150 Bottles</p>
+            <div class="map-icon">🟡</div><h3>Medium</h3><p>⏱️ 20 Min</p><p>🐛 120 Bots</p>
             <div class="prize-badge silver">🥈 +500 + Coins</div>
         </div>
         <div class="map-card" onclick="selectMap('large', this)">
-            <div class="map-icon">🔴</div><h3>Large</h3><p>⏱️ 30 Min</p><p>📏 20000x16000</p><p>🐛 180 Bots</p><p>🍾 250 Bottles</p>
+            <div class="map-icon">🔴</div><h3>Large</h3><p>⏱️ 30 Min</p><p>🐛 180 Bots</p>
             <div class="prize-badge gold">🥇 +1000 + Coins</div>
         </div>
     </div>
@@ -377,12 +384,15 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <div class="hud-row"><div class="hud-label">👤 PLAYER</div><div class="hud-value" id="playerNameDisplay" style="font-size:14px;">-</div></div>
         <div class="hud-row"><div class="hud-label">🏆 SCORE</div><div class="hud-value" id="scoreValue">0</div></div>
         <div class="hud-row"><div class="hud-label">📏 LENGTH</div><div class="hud-value" id="lengthValue" style="font-size:14px;">10 m</div></div>
-        <div class="live-ranking">
-            <div class="live-ranking-title">🏆 LIVE RANKING</div>
-            <div id="liveRankingList"></div>
+        <div class="my-rank-box">
+            <div class="my-rank-title">🏆 YOUR RANK</div>
+            <div class="my-rank-display">
+                <div class="my-rank-num" id="myRankNum">#1</div>
+                <div class="my-rank-text" id="myRankText">of 80 players</div>
+            </div>
         </div>
     </div>
-    <div id="gameControls">
+    <div id="gameControls" class="arrow-controls">
         <div class="ctrl-side">
             <div class="ctrl-btn left" id="leftBtn">◀</div>
             <div class="ctrl-btn right" id="rightBtn">▶</div>
@@ -390,6 +400,13 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <div class="ctrl-side">
             <div class="ctrl-btn boost" id="boostBtn">🚀<br>BOOST</div>
         </div>
+    </div>
+    <div id="joystickContainer">
+        <div id="joystickBase"></div>
+        <div id="joystickHandle"></div>
+    </div>
+    <div id="boostBtnAlt" style="display:none; position:fixed; bottom:30px; right:30px; z-index:20;">
+        <div class="ctrl-btn boost" id="boostBtnJoystick">🚀<br>BOOST</div>
     </div>
 </div>
 
@@ -404,10 +421,6 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
         <div class="reward-box">
             <div>🎁 MATCH REWARDS</div>
             <div class="big">💰 +<span id="goCoinsEarned">0</span> coins</div>
-        </div>
-        <div class="final-results">
-            <h3>🏁 FINAL MATCH RESULTS</h3>
-            <div id="goFinalResults"></div>
         </div>
         <button class="btn" onclick="playAgain()">🔄 PLAY AGAIN</button>
         <button class="btn secondary" onclick="goToMainMenu()">🏠 MAIN MENU</button>
@@ -430,18 +443,9 @@ h2 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 25px; background: linear-
             <div>🎁 MATCH REWARDS</div>
             <div class="big">💰 +<span id="winCoinsEarned">0</span> coins</div>
         </div>
-        <div class="final-results">
-            <h3>🏁 FINAL MATCH RESULTS</h3>
-            <div id="winFinalResults"></div>
-        </div>
         <button class="btn" onclick="playAgain()">🔄 PLAY AGAIN</button>
         <button class="btn secondary" onclick="goToMainMenu()">🏠 MAIN MENU</button>
     </div>
-</div>
-
-<div class="tutorial-overlay" id="tutorialOverlay">
-    <div class="tutorial-dim" id="tutorialDim"></div>
-    <div class="tutorial-box center" id="tutorialBox"></div>
 </div>
 <script>
 const starfield = document.getElementById('starfield');
@@ -466,23 +470,23 @@ function animateStars() {
     requestAnimationFrame(animateStars);
 }
 animateStars();
-function createParticles() {
-    const colors = ['#00ffff', '#ff00ff', '#ffff00', '#00ff88', '#ff8800'];
-    for (let i = 0; i < 8; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = Math.random() * 6 + 3;
-        p.style.width = size + 'px'; p.style.height = size + 'px';
-        p.style.background = colors[Math.floor(Math.random()*colors.length)];
-        p.style.boxShadow = `0 0 15px ${p.style.background}`;
-        p.style.left = Math.random() * window.innerWidth + 'px';
-        p.style.top = Math.random() * window.innerHeight + 'px';
-        p.style.animationDelay = Math.random() * 15 + 's';
-        p.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        document.body.appendChild(p);
+
+// FORCE LANDSCAPE & FULLSCREEN
+function lockLandscape() {
+    if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
     }
 }
-createParticles();
+function goFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
+    else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+    else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+}
+window.addEventListener('load', lockLandscape);
+document.addEventListener('click', () => { lockLandscape(); goFullscreen(); }, { once: true });
+document.addEventListener('touchstart', () => { lockLandscape(); goFullscreen(); }, { once: true });
 
 let playerName = '', selectedMap = null, selectedSkin = 0;
 let gameMode = 'single';
@@ -496,6 +500,8 @@ let boostTimer = 0, boostCooldownTimer = 0, canBoost = true;
 let turnLeft = false, turnRight = false, mouseControlActive = false;
 let activePowers = {};
 let liveRankingUpdateCounter = 0;
+let controlType = localStorage.getItem('wormsControlType') || 'arrows';
+let joystickActive = false, joystickAngle = 0, joystickDistance = 0;
 
 function loadLeaderboard() { return JSON.parse(localStorage.getItem('wormsLeaderboard') || '[]'); }
 function saveLeaderboard(data) { localStorage.setItem('wormsLeaderboard', JSON.stringify(data)); }
@@ -514,64 +520,158 @@ function updatePlayerStats(stats) {
     player.gamesPlayed += 1;
     if (stats.time > player.bestTime) player.bestTime = stats.time;
     saveLeaderboard(lb);
+    saveToFirebase(stats);
 }
 
+function saveToFirebase(stats) {
+    if (!window.fbReady) return;
+    try {
+        const safeKey = stats.name.replace(/[.#$\[\]\/]/g, '_');
+        const playerRef = window.fbRef(window.fbDB, 'leaderboard/' + safeKey);
+        window.fbGet(playerRef).then(snapshot => {
+            let player = snapshot.exists() ? snapshot.val() : { name: stats.name, bestScore: 0, totalKills: 0, totalWins: 0, totalCoins: 0, gamesPlayed: 0, bestTime: 0 };
+            if (stats.score > (player.bestScore||0)) player.bestScore = stats.score;
+            player.totalKills = (player.totalKills||0) + stats.kills;
+            if (stats.won) player.totalWins = (player.totalWins||0) + 1;
+            player.totalCoins = (player.totalCoins||0) + stats.coinsEarned;
+            player.gamesPlayed = (player.gamesPlayed||0) + 1;
+            if (stats.time > (player.bestTime||0)) player.bestTime = stats.time;
+            player.lastPlayed = Date.now();
+            player.name = stats.name;
+            window.fbSet(playerRef, player).then(() => console.log('✅ Saved to Firebase!')).catch(e => console.error(e));
+        });
+    } catch(e) { console.error(e); }
+}
+
+let currentLBMode = 'global';
 let currentLBTab = 'score';
-function switchLBTab(tab, el) {
-    currentLBTab = tab;
-    document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    renderLeaderboard();
+let globalLBCache = [];
+
+function switchLBMode(mode) {
+    currentLBMode = mode;
+    document.querySelectorAll('.lb-mode-tab').forEach(t => t.classList.remove('active'));
+    if (mode === 'global') {
+        document.getElementById('lbModeGlobal').classList.add('active');
+        loadGlobalLeaderboard();
+    } else {
+        document.getElementById('lbModeLocal').classList.add('active');
+        renderLocalLeaderboard();
+    }
 }
 
-function renderLeaderboard() {
+function loadGlobalLeaderboard() {
+    if (!window.fbReady) {
+        document.getElementById('lbTable').innerHTML = '<div class="lb-loading">🌐 Firebase loading...</div>';
+        setTimeout(loadGlobalLeaderboard, 1500);
+        return;
+    }
+    document.getElementById('lbTable').innerHTML = '<div class="lb-loading">🌐 Loading global leaderboard...</div>';
+    try {
+        const lbRef = window.fbRef(window.fbDB, 'leaderboard');
+        window.fbGet(lbRef).then(snapshot => {
+            globalLBCache = [];
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                Object.keys(data).forEach(key => globalLBCache.push(data[key]));
+            }
+            renderGlobalLeaderboard();
+        }).catch(err => {
+            document.getElementById('lbTable').innerHTML = '<div class="lb-empty">⚠️ Cannot connect. Try local.</div>';
+        });
+    } catch(e) { document.getElementById('lbTable').innerHTML = '<div class="lb-empty">⚠️ Error: '+e.message+'</div>'; }
+}
+
+function renderGlobalLeaderboard() {
+    let sorted;
+    let valKey, valLabel;
+    if (currentLBTab === 'score') { sorted = [...globalLBCache].sort((a,b) => (b.bestScore||0) - (a.bestScore||0)); valKey = 'bestScore'; valLabel = 'Score'; }
+    else if (currentLBTab === 'kills') { sorted = [...globalLBCache].sort((a,b) => (b.totalKills||0) - (a.totalKills||0)); valKey = 'totalKills'; valLabel = 'Kills'; }
+    else { sorted = [...globalLBCache].sort((a,b) => (b.totalCoins||0) - (a.totalCoins||0)); valKey = 'totalCoins'; valLabel = 'Coins'; }
+    const top10 = sorted.slice(0, 10);
+    const tbl = document.getElementById('lbTable');
+    if (top10.length === 0) { tbl.innerHTML = '<div class="lb-empty">🌐 Global leaderboard is empty. Play to be first!</div>'; return; }
+    let html = `<div style="text-align:center; margin-bottom:10px; color:#00ff88; font-size:13px; font-weight:bold;">🌐 TOP 10 WORLDWIDE</div>`;
+    html += `<div class="lb-row" style="background:rgba(0,255,136,0.15); font-weight:bold;"><div class="lb-rank">#</div><div>PLAYER</div><div class="lb-val">${valLabel}</div><div class="lb-val">Wins</div><div class="lb-val">Games</div></div>`;
+    top10.forEach((p, i) => {
+        const rank = i + 1;
+        const isYou = p.name === playerName;
+        let cls = '';
+        if (rank === 1) cls = 'gold';
+        else if (rank === 2) cls = 'silver';
+        else if (rank === 3) cls = 'bronze';
+        if (isYou) cls += ' you';
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#'+rank;
+        html += `<div class="lb-row ${cls}"><div class="lb-rank">${medal}</div><div class="lb-name">${p.name}${isYou?' (You)':''}</div><div class="lb-val">${p[valKey]||0}</div><div class="lb-val">${p.totalWins||0}</div><div class="lb-val">${p.gamesPlayed||0}</div></div>`;
+    });
+    tbl.innerHTML = html;
+    const me = globalLBCache.find(p => p.name === playerName);
+    showMyStats(me);
+}
+
+function renderLocalLeaderboard() {
     const lb = loadLeaderboard();
     let sorted;
-    let valKey, valLabel, formatFn = v => v;
+    let valKey, valLabel;
     if (currentLBTab === 'score') { sorted = [...lb].sort((a,b) => b.bestScore - a.bestScore); valKey = 'bestScore'; valLabel = 'Score'; }
     else if (currentLBTab === 'kills') { sorted = [...lb].sort((a,b) => b.totalKills - a.totalKills); valKey = 'totalKills'; valLabel = 'Kills'; }
-    else if (currentLBTab === 'coins') { sorted = [...lb].sort((a,b) => b.totalCoins - a.totalCoins); valKey = 'totalCoins'; valLabel = 'Coins'; }
-    else if (currentLBTab === 'time') { sorted = [...lb].sort((a,b) => b.bestTime - a.bestTime); valKey = 'bestTime'; valLabel = 'Time'; formatFn = v => Math.floor(v/60)+'m '+(v%60)+'s'; }
+    else { sorted = [...lb].sort((a,b) => b.totalCoins - a.totalCoins); valKey = 'totalCoins'; valLabel = 'Coins'; }
     const top20 = sorted.slice(0, 20);
     const tbl = document.getElementById('lbTable');
-    if (top20.length === 0) { tbl.innerHTML = '<div class="lb-empty">📭 No players yet. Play to add records!</div>'; }
-    else {
-        let html = `<div class="lb-row" style="background:rgba(0,255,255,0.15); font-weight:bold;"><div class="lb-rank">#</div><div>PLAYER</div><div class="lb-val">${valLabel}</div><div class="lb-val">Wins</div><div class="lb-val">Games</div></div>`;
-        top20.forEach((p, i) => {
-            const rank = i + 1;
-            const isYou = p.name === playerName;
-            let cls = '';
-            if (rank === 1) cls = 'gold';
-            else if (rank === 2) cls = 'silver';
-            else if (rank === 3) cls = 'bronze';
-            if (isYou) cls += ' you';
-            const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#'+rank;
-            html += `<div class="lb-row ${cls}"><div class="lb-rank">${medal}</div><div class="lb-name">${p.name}${isYou?' (You)':''}</div><div class="lb-val">${formatFn(p[valKey])}</div><div class="lb-val">${p.totalWins}</div><div class="lb-val">${p.gamesPlayed}</div></div>`;
-        });
-        tbl.innerHTML = html;
-    }
+    if (top20.length === 0) { tbl.innerHTML = '<div class="lb-empty">📭 No local records yet!</div>'; return; }
+    let html = `<div style="text-align:center; margin-bottom:10px; color:#00ffff; font-size:13px; font-weight:bold;">💾 LOCAL RECORDS</div>`;
+    html += `<div class="lb-row" style="background:rgba(0,255,255,0.15); font-weight:bold;"><div class="lb-rank">#</div><div>PLAYER</div><div class="lb-val">${valLabel}</div><div class="lb-val">Wins</div><div class="lb-val">Games</div></div>`;
+    top20.forEach((p, i) => {
+        const rank = i + 1;
+        const isYou = p.name === playerName;
+        let cls = '';
+        if (rank === 1) cls = 'gold';
+        else if (rank === 2) cls = 'silver';
+        else if (rank === 3) cls = 'bronze';
+        if (isYou) cls += ' you';
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#'+rank;
+        html += `<div class="lb-row ${cls}"><div class="lb-rank">${medal}</div><div class="lb-name">${p.name}${isYou?' (You)':''}</div><div class="lb-val">${p[valKey]}</div><div class="lb-val">${p.totalWins}</div><div class="lb-val">${p.gamesPlayed}</div></div>`;
+    });
+    tbl.innerHTML = html;
     const me = lb.find(p => p.name === playerName);
+    showMyStats(me);
+}
+
+function showMyStats(me) {
     const myBox = document.getElementById('myStatsBox');
     const grid = document.getElementById('myStatsGrid');
     if (me) {
         myBox.style.display = 'block';
         grid.innerHTML = `
-            <div class="stat-item"><div class="lbl">Best Score</div><div class="val">${me.bestScore}</div></div>
-            <div class="stat-item"><div class="lbl">Total Kills</div><div class="val">${me.totalKills}</div></div>
-            <div class="stat-item"><div class="lbl">Wins</div><div class="val">${me.totalWins}</div></div>
-            <div class="stat-item"><div class="lbl">Coins</div><div class="val">${me.totalCoins}</div></div>
-            <div class="stat-item"><div class="lbl">Games</div><div class="val">${me.gamesPlayed}</div></div>
-            <div class="stat-item"><div class="lbl">Best Time</div><div class="val">${Math.floor(me.bestTime/60)}m</div></div>
+            <div class="stat-item"><div class="lbl">Best Score</div><div class="val">${me.bestScore||0}</div></div>
+            <div class="stat-item"><div class="lbl">Total Kills</div><div class="val">${me.totalKills||0}</div></div>
+            <div class="stat-item"><div class="lbl">Wins</div><div class="val">${me.totalWins||0}</div></div>
+            <div class="stat-item"><div class="lbl">Coins</div><div class="val">${me.totalCoins||0}</div></div>
+            <div class="stat-item"><div class="lbl">Games</div><div class="val">${me.gamesPlayed||0}</div></div>
+            <div class="stat-item"><div class="lbl">Best Time</div><div class="val">${Math.floor((me.bestTime||0)/60)}m</div></div>
         `;
     } else { myBox.style.display = 'none'; }
 }
 
-function showLeaderboard() { renderLeaderboard(); showScreen('leaderboardScreen'); }
-function clearLeaderboard() {
-    if (confirm('Sure? Sab records delete ho jayenge!')) {
+function switchLBTab(tab, el) {
+    currentLBTab = tab;
+    document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    if (currentLBMode === 'global') renderGlobalLeaderboard();
+    else renderLocalLeaderboard();
+}
+
+function showLeaderboard() {
+    showScreen('leaderboardScreen');
+    currentLBMode = 'global';
+    document.querySelectorAll('.lb-mode-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('lbModeGlobal').classList.add('active');
+    loadGlobalLeaderboard();
+}
+
+function clearLocalData() {
+    if (confirm('Sure? Local records delete honge. Global stats safe rahenge.')) {
         localStorage.removeItem('wormsLeaderboard');
-        renderLeaderboard();
-        alert('🗑️ Cleared!');
+        alert('🗑️ Local data cleared!');
     }
 }
 
@@ -626,14 +726,24 @@ function showScreen(id) {
     document.getElementById(id).classList.add('active');
     const hideCoins = ['nameScreen', 'gameScreen', 'loadingScreen'];
     document.getElementById('coinDisplay').style.display = hideCoins.includes(id) ? 'none' : 'block';
-    const hideName = ['nameScreen', 'gameScreen', 'loadingScreen'];
     const nameDisp = document.getElementById('nameDisplay');
-    if (hideName.includes(id) || !playerName) {
-        nameDisp.classList.remove('show');
-    } else {
-        nameDisp.classList.add('show');
-        document.getElementById('topPlayerName').textContent = playerName;
+    if (hideCoins.includes(id) || !playerName) nameDisp.classList.remove('show');
+    else { nameDisp.classList.add('show'); document.getElementById('topPlayerName').textContent = playerName; }
+    if (id === 'settingsScreen') {
+        document.getElementById('currentNameDisplay').textContent = playerName || 'Not Set';
+        updateControlSelection();
     }
+}
+
+function selectControlType(type) {
+    controlType = type;
+    localStorage.setItem('wormsControlType', type);
+    updateControlSelection();
+}
+
+function updateControlSelection() {
+    document.getElementById('ctrlOptArrows').classList.toggle('selected', controlType === 'arrows');
+    document.getElementById('ctrlOptJoystick').classList.toggle('selected', controlType === 'joystick');
 }
 
 function submitName() {
@@ -671,10 +781,7 @@ function goToSkinScreen() {
     showScreen('skinScreen');
 }
 
-function backFromSkin() { 
-    if (gameMode === 'join') showScreen('joinScreen'); 
-    else showScreen('mapScreen'); 
-}
+function backFromSkin() { if (gameMode === 'join') showScreen('joinScreen'); else showScreen('mapScreen'); }
 
 function buildSkinGrid() {
     const grid = document.getElementById('skinGrid');
@@ -883,6 +990,7 @@ function setupControlButtons() {
     const leftBtn = document.getElementById('leftBtn');
     const rightBtn = document.getElementById('rightBtn');
     const boostBtn = document.getElementById('boostBtn');
+    const boostBtnJ = document.getElementById('boostBtnJoystick');
     const leftDown = (e) => { e.preventDefault(); turnLeft = true; mouseControlActive = false; };
     const leftUp = (e) => { e.preventDefault(); turnLeft = false; };
     const rightDown = (e) => { e.preventDefault(); turnRight = true; mouseControlActive = false; };
@@ -900,14 +1008,63 @@ function setupControlButtons() {
     const boostFn = (e) => { e.preventDefault(); activateBoost(); };
     boostBtn.addEventListener('click', boostFn);
     boostBtn.addEventListener('touchend', boostFn);
+    boostBtnJ.addEventListener('click', boostFn);
+    boostBtnJ.addEventListener('touchend', boostFn);
 }
 setupControlButtons();
+
+function setupJoystick() {
+    const base = document.getElementById('joystickBase');
+    const handle = document.getElementById('joystickHandle');
+    const container = document.getElementById('joystickContainer');
+    const maxDist = 50;
+    let centerX, centerY;
+    
+    function startJoy(e) {
+        e.preventDefault();
+        joystickActive = true;
+        mouseControlActive = false;
+        const rect = base.getBoundingClientRect();
+        centerX = rect.left + rect.width / 2;
+        centerY = rect.top + rect.height / 2;
+    }
+    
+    function moveJoy(e) {
+        if (!joystickActive) return;
+        e.preventDefault();
+        const touch = e.touches ? e.touches[0] : e;
+        const dx = touch.clientX - centerX;
+        const dy = touch.clientY - centerY;
+        const dist = Math.min(Math.hypot(dx, dy), maxDist);
+        joystickAngle = Math.atan2(dy, dx);
+        joystickDistance = dist / maxDist;
+        const hx = Math.cos(joystickAngle) * dist;
+        const hy = Math.sin(joystickAngle) * dist;
+        handle.style.transform = `translate(calc(-50% + ${hx}px), calc(-50% + ${hy}px))`;
+    }
+    
+    function endJoy(e) {
+        if (e) e.preventDefault();
+        joystickActive = false;
+        joystickDistance = 0;
+        handle.style.transform = 'translate(-50%, -50%)';
+    }
+    
+    container.addEventListener('mousedown', startJoy);
+    container.addEventListener('touchstart', startJoy);
+    window.addEventListener('mousemove', moveJoy);
+    window.addEventListener('touchmove', moveJoy, { passive: false });
+    window.addEventListener('mouseup', endJoy);
+    window.addEventListener('touchend', endJoy);
+}
+setupJoystick();
 
 function activateBoost() {
     if (!canBoost || !player || !player.alive) return;
     boostActive = true; canBoost = false;
     boostTimer = boostDuration; boostCooldownTimer = boostDuration + boostCooldown;
     document.getElementById('boostBtn').classList.add('active');
+    document.getElementById('boostBtnJoystick').classList.add('active');
 }
 
 function updateBoostUI(dt) {
@@ -917,16 +1074,23 @@ function updateBoostUI(dt) {
             boostActive = false;
             document.getElementById('boostBtn').classList.remove('active');
             document.getElementById('boostBtn').classList.add('cooldown');
+            document.getElementById('boostBtnJoystick').classList.remove('active');
+            document.getElementById('boostBtnJoystick').classList.add('cooldown');
         }
     }
     if (!canBoost && !boostActive) {
         boostCooldownTimer -= dt;
         const cooldownLeft = Math.ceil(boostCooldownTimer / 1000);
-        if (cooldownLeft > 0) document.getElementById('boostBtn').innerHTML = `<span class="cooldown-text">${cooldownLeft}</span>`;
+        if (cooldownLeft > 0) {
+            document.getElementById('boostBtn').innerHTML = `<span class="cooldown-text">${cooldownLeft}</span>`;
+            document.getElementById('boostBtnJoystick').innerHTML = `<span class="cooldown-text">${cooldownLeft}</span>`;
+        }
         if (boostCooldownTimer <= 0) {
             canBoost = true;
             document.getElementById('boostBtn').classList.remove('cooldown');
             document.getElementById('boostBtn').innerHTML = '🚀<br>BOOST';
+            document.getElementById('boostBtnJoystick').classList.remove('cooldown');
+            document.getElementById('boostBtnJoystick').innerHTML = '🚀<br>BOOST';
         }
     }
 }
@@ -959,46 +1123,41 @@ function updatePowerDisplay() {
     });
 }
 
-function getRankingData() {
-    const allPlayers = [];
-    if (player && player.alive) allPlayers.push({ name: playerName + ' (You)', score: score, isYou: true });
-    enemies.forEach(e => {
-        if (e.alive) {
-            const enemyScore = e.segments.length * 10;
-            allPlayers.push({ name: e.name, score: enemyScore, isYou: false });
-        }
-    });
+function updateMyRank() {
+    if (!player || !player.alive) return;
+    const allScores = [score];
+    enemies.forEach(e => { if (e.alive) allScores.push(e.segments.length * 10); });
     if (isMultiplayer) {
-        Object.values(multiplayerState.players).forEach(p => {
-            if (p.alive) allPlayers.push({ name: p.name + ' 🌐', score: p.score || 0, isYou: false });
-        });
+        Object.values(multiplayerState.players).forEach(p => { if (p.alive) allScores.push(p.score || 0); });
     }
-    return allPlayers.sort((a,b) => b.score - a.score);
+    allScores.sort((a,b) => b - a);
+    const myRank = allScores.indexOf(score) + 1;
+    const total = allScores.length;
+    document.getElementById('myRankNum').textContent = '#' + myRank;
+    document.getElementById('myRankText').textContent = `of ${total} players`;
 }
 
-function updateLiveRanking() {
-    const ranking = getRankingData().slice(0, 5);
-    const container = document.getElementById('liveRankingList');
-    let html = '';
-    ranking.forEach((p, i) => {
-        const rank = i + 1;
-        let cls = '';
-        if (p.isYou) cls = 'you';
-        else if (rank === 1) cls = 'first';
-        else if (rank === 2) cls = 'second';
-        else if (rank === 3) cls = 'third';
-        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#'+rank;
-        const shortName = p.name.length > 12 ? p.name.substring(0,11) + '..' : p.name;
-        html += `<div class="rank-row ${cls}"><div class="rank-pos">${medal}</div><div class="rank-name">${shortName}</div><div class="rank-score">${p.score}</div></div>`;
-    });
-    container.innerHTML = html;
+function setupControlsForType() {
+    const arrows = document.getElementById('gameControls');
+    const joy = document.getElementById('joystickContainer');
+    const boostJ = document.getElementById('boostBtnAlt');
+    if (controlType === 'joystick') {
+        arrows.classList.add('hidden');
+        joy.classList.add('active');
+        boostJ.style.display = 'block';
+    } else {
+        arrows.classList.remove('hidden');
+        joy.classList.remove('active');
+        boostJ.style.display = 'none';
+    }
 }
 
-function startGame() { isMultiplayer = false; showScreen('gameScreen'); initGame(); }
+function startGame() { isMultiplayer = false; showScreen('gameScreen'); setupControlsForType(); initGame(); }
 
 function multiplayerInit(players, initialFoods, initialBottles) {
     isMultiplayer = true;
     showScreen('gameScreen');
+    setupControlsForType();
     const map = MAPS[selectedMap];
     WORLD.w = map.width; WORLD.h = map.height;
     timeLimit = map.time;
@@ -1053,6 +1212,8 @@ function resetGameState() {
     boostTimer = 0; boostCooldownTimer = 0;
     document.getElementById('boostBtn').classList.remove('active', 'cooldown');
     document.getElementById('boostBtn').innerHTML = '🚀<br>BOOST';
+    document.getElementById('boostBtnJoystick').classList.remove('active', 'cooldown');
+    document.getElementById('boostBtnJoystick').innerHTML = '🚀<br>BOOST';
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
@@ -1101,7 +1262,12 @@ function isMobile() { return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgen
 function updatePlayer() {
     if (!player.alive) return;
     const head = player.segments[0];
-    if (turnLeft || turnRight) {
+    if (controlType === 'joystick' && joystickActive && joystickDistance > 0.1) {
+        let diff = joystickAngle - player.angle;
+        while (diff > Math.PI) diff -= Math.PI*2;
+        while (diff < -Math.PI) diff += Math.PI*2;
+        player.angle += diff * 0.2;
+    } else if (turnLeft || turnRight) {
         const turnSpeed = 0.07;
         if (turnLeft) player.angle -= turnSpeed;
         if (turnRight) player.angle += turnSpeed;
@@ -1139,6 +1305,9 @@ function updatePlayer() {
 
 function updateEnemies() {
     const updateRadius = 2500;
+    const playerLengthM = player ? Math.floor(player.segments.length * 0.5) : 0;
+    const canAttack = playerLengthM >= 20;
+    
     if (!player || !player.alive) {
         enemies.forEach(enemy => {
             if (!enemy.alive) return;
@@ -1153,7 +1322,6 @@ function updateEnemies() {
         if (!enemy.alive) return;
         const eHead = enemy.segments[0];
         const distToPlayer = Math.hypot(playerHead.x - eHead.x, playerHead.y - eHead.y);
-        
         if (distToPlayer > updateRadius) {
             enemy.retargetTimer++;
             if (enemy.retargetTimer > 300) {
@@ -1169,7 +1337,6 @@ function updateEnemies() {
             moveEnemy(enemy);
             return;
         }
-        
         if (enemy.attackCooldown > 0) enemy.attackCooldown--;
         if (enemy.boostTimer > 0) enemy.boostTimer--;
         const enemyLength = enemy.segments.length;
@@ -1179,7 +1346,7 @@ function updateEnemies() {
         const isVeryNear = distToPlayer < 250;
         const playerHasFireOrShield = activePowers.fire || activePowers.shield;
         
-        if (enemy.aiType === 'aggressive' && isStronger && isNearPlayer && enemy.attackCooldown <= 0 && !playerHasFireOrShield) {
+        if (canAttack && enemy.aiType === 'aggressive' && isStronger && isNearPlayer && enemy.attackCooldown <= 0 && !playerHasFireOrShield) {
             enemy.attackMode = true;
             smartAttackBehavior(enemy, playerHead, distToPlayer);
         } else if (isVeryNear && !isStronger && !activePowers.ghost) {
@@ -1188,7 +1355,7 @@ function updateEnemies() {
         } else if (isVeryNear && playerHasFireOrShield) {
             enemy.attackMode = false;
             fleeBehavior(enemy, playerHead);
-        } else if (enemy.aiType === 'aggressive' && distToPlayer < 800 && isStronger && enemy.attackCooldown <= 0 && !playerHasFireOrShield) {
+        } else if (canAttack && enemy.aiType === 'aggressive' && distToPlayer < 800 && isStronger && enemy.attackCooldown <= 0 && !playerHasFireOrShield) {
             enemy.attackMode = true;
             chaseBehavior(enemy, playerHead, distToPlayer);
         } else {
@@ -1211,14 +1378,8 @@ function smartAttackBehavior(enemy, playerHead, dist) {
     const circleX = playerHead.x + Math.cos(angleToPlayer + Math.PI/2 * enemy.circleDirection) * 120;
     const circleY = playerHead.y + Math.sin(angleToPlayer + Math.PI/2 * enemy.circleDirection) * 120;
     let targetX, targetY;
-    if (dist < 200) {
-        targetX = interceptX;
-        targetY = interceptY;
-        enemy.boostTimer = 10;
-    } else {
-        targetX = circleX;
-        targetY = circleY;
-    }
+    if (dist < 200) { targetX = interceptX; targetY = interceptY; enemy.boostTimer = 10; }
+    else { targetX = circleX; targetY = circleY; }
     const desired = Math.atan2(targetY - eHead.y, targetX - eHead.x);
     let diff = desired - enemy.angle;
     while (diff > Math.PI) diff -= Math.PI*2;
@@ -1347,7 +1508,6 @@ function checkCollisions() {
                 player.segments.push({ x: tail.x, y: tail.y });
             }
             if (player.segments.length % 20 === 0 && player.radius < 30) player.radius += 0.5;
-            if (tutorialActive && tutorialStep === 3) tutorialTaskProgress++;
         }
     }
     for (let i = bottles.length - 1; i >= 0; i--) {
@@ -1365,11 +1525,6 @@ function checkCollisions() {
                 const seg = enemy.segments[i];
                 if (Math.hypot(head.x - seg.x, head.y - seg.y) < player.radius + enemy.radius - 3) {
                     if (activePowers.shield) { delete activePowers.shield; updatePowerDisplay(); killEnemy(enemy); }
-                    else if (tutorialActive) {
-                        player.segments[0].x -= Math.cos(player.angle) * 50;
-                        player.segments[0].y -= Math.sin(player.angle) * 50;
-                        player.angle += Math.PI;
-                    }
                     else { gameOver(); return; }
                 }
             }
@@ -1458,39 +1613,11 @@ function drawFruit(sx, sy, fruit, pulse) {
     ctx.translate(sx, sy);
     ctx.shadowColor = fruit.color;
     ctx.shadowBlur = 10;
-    if (fruit.type === 'apple' || fruit.type === 'orange' || fruit.type === 'peach' || fruit.type === 'cherry') {
-        ctx.fillStyle = fruit.color;
-        ctx.beginPath(); ctx.arc(0, 2, r, 0, Math.PI*2); ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = fruit.leafColor;
-        ctx.beginPath(); ctx.ellipse(2, -r+2, 4, 2, -0.5, 0, Math.PI*2); ctx.fill();
-    } else if (fruit.type === 'banana') {
-        ctx.fillStyle = fruit.color;
-        ctx.beginPath(); ctx.ellipse(0, 0, r, r*0.5, 0.5, 0, Math.PI*2); ctx.fill();
-    } else if (fruit.type === 'grape') {
-        ctx.fillStyle = fruit.color;
-        for (let i = 0; i < 5; i++) { const a = i * Math.PI * 2 / 5; ctx.beginPath(); ctx.arc(Math.cos(a) * 4, Math.sin(a) * 4 + 2, 5, 0, Math.PI*2); ctx.fill(); }
-    } else if (fruit.type === 'strawberry') {
-        ctx.fillStyle = fruit.color;
-        ctx.beginPath(); ctx.moveTo(0, r); ctx.lineTo(-r, -r*0.3); ctx.lineTo(r, -r*0.3); ctx.closePath(); ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = fruit.leafColor;
-        ctx.beginPath(); ctx.arc(0, -r*0.4, 4, 0, Math.PI*2); ctx.fill();
-    } else if (fruit.type === 'watermelon') {
-        ctx.fillStyle = fruit.leafColor;
-        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#ff3366';
-        ctx.beginPath(); ctx.arc(0, 0, r-2, 0, Math.PI*2); ctx.fill();
-    } else if (fruit.type === 'kiwi') {
-        ctx.fillStyle = '#5d4037';
-        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = fruit.color;
-        ctx.beginPath(); ctx.arc(0, 0, r-2, 0, Math.PI*2); ctx.fill();
-    } else if (fruit.type === 'mango') {
-        ctx.fillStyle = fruit.color;
-        ctx.beginPath(); ctx.ellipse(0, 0, r*0.8, r, 0, 0, Math.PI*2); ctx.fill();
-    }
+    ctx.fillStyle = fruit.color;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.fill();
     ctx.shadowBlur = 0;
+    ctx.fillStyle = fruit.leafColor;
+    ctx.beginPath(); ctx.ellipse(2, -r+2, 4, 2, -0.5, 0, Math.PI*2); ctx.fill();
     ctx.restore();
 }
 
@@ -1506,9 +1633,6 @@ function drawBottle(sx, sy, power, pulse, float) {
     ctx.shadowBlur = 0;
     ctx.fillStyle = power.color;
     ctx.beginPath(); ctx.roundRect(-6, -4, 12, 14, 2); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.strokeStyle = '#fff';
-    ctx.beginPath(); ctx.rect(-3, -14, 6, 5); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#8b4513';
     ctx.beginPath(); ctx.rect(-4, -16, 8, 3); ctx.fill();
     ctx.font = 'bold 10px Arial';
@@ -1588,15 +1712,18 @@ function drawSnake(snake, isPlayer, isOnlinePlayer) {
         ctx.fillStyle = '#000';
         ctx.beginPath(); ctx.arc(ex + Math.cos(ang)*2, ey + Math.sin(ang)*2, r*0.22, 0, Math.PI*2); ctx.fill();
     }
-    ctx.fillStyle = isOnlinePlayer ? '#ffd700' : '#fff';
-    ctx.font = 'bold 14px Arial';
-    ctx.textAlign = 'center';
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 3;
-    const ny = hy - r - 12;
-    const label = isOnlinePlayer ? '🌐 ' + snake.name : snake.name;
-    ctx.strokeText(label, hx, ny);
-    ctx.fillText(label, hx, ny);
+    // Only show OWN name + online players
+    if (isPlayer || isOnlinePlayer) {
+        ctx.fillStyle = isOnlinePlayer ? '#ffd700' : '#00ff88';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 3;
+        const ny = hy - r - 12;
+        const label = isOnlinePlayer ? '🌐 ' + snake.name : snake.name;
+        ctx.strokeText(label, hx, ny);
+        ctx.fillText(label, hx, ny);
+    }
 }
 
 function drawMiniMap() {
@@ -1609,17 +1736,12 @@ function drawMiniMap() {
     miniCtx.strokeRect(1, 1, mw-2, mh-2);
     const sx = mw / WORLD.w;
     const sy = mh / WORLD.h;
-    bottles.forEach(b => {
-        miniCtx.fillStyle = b.power.color;
-        miniCtx.beginPath();
-        miniCtx.arc(b.x * sx, b.y * sy, 2, 0, Math.PI*2);
-        miniCtx.fill();
-    });
+    // Show SNAKES not bottles
     enemies.forEach(e => {
         if (!e.alive) return;
         miniCtx.fillStyle = '#ff6666';
         miniCtx.beginPath();
-        miniCtx.arc(e.segments[0].x * sx, e.segments[0].y * sy, 1.5, 0, Math.PI*2);
+        miniCtx.arc(e.segments[0].x * sx, e.segments[0].y * sy, 2, 0, Math.PI*2);
         miniCtx.fill();
     });
     if (isMultiplayer) {
@@ -1658,7 +1780,7 @@ function gameLoop() {
     powerUpdateCounter++;
     if (powerUpdateCounter % 30 === 0) updatePowerDisplay();
     liveRankingUpdateCounter++;
-    if (liveRankingUpdateCounter % 20 === 0) updateLiveRanking();
+    if (liveRankingUpdateCounter % 20 === 0) updateMyRank();
     updatePlayer();
     if (!isMultiplayer || isHost) updateEnemies();
     checkCollisions();
@@ -1673,25 +1795,8 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-function getFinalResults() {
-    const all = getRankingData();
-    return all.slice(0, 5);
-}
-
-function renderFinalResults(containerId) {
-    const results = getFinalResults();
-    let html = '';
-    results.forEach((p, i) => {
-        const rank = i + 1;
-        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#'+rank;
-        html += `<div class="fr-row ${p.isYou?'you':''}"><div class="pos">${medal}</div><div class="nm">${p.name}</div><div class="sc">${p.score}</div></div>`;
-    });
-    document.getElementById(containerId).innerHTML = html;
-}
-
 function gameOver() {
     if (!gameRunning) return;
-    if (tutorialActive) return;
     gameRunning = false;
     player.alive = false;
     if (timerInterval) clearInterval(timerInterval);
@@ -1708,7 +1813,6 @@ function gameOver() {
     document.getElementById('goKills').textContent = totalKills;
     document.getElementById('goTime').textContent = `${m}m ${s}s`;
     document.getElementById('goCoinsEarned').textContent = coinsEarned;
-    renderFinalResults('goFinalResults');
     document.getElementById('gameOverOverlay').classList.add('active');
 }
 
@@ -1738,7 +1842,6 @@ function winGame() {
     if (map.prize === 'bronze') { prizeSection.style.background = 'linear-gradient(45deg, #cd7f32, #8b4513)'; prizeSection.style.color = '#fff'; winTrophy.textContent = '🥉'; }
     else if (map.prize === 'silver') { prizeSection.style.background = 'linear-gradient(45deg, #c0c0c0, #808080)'; prizeSection.style.color = '#000'; winTrophy.textContent = '🥈'; }
     else if (map.prize === 'gold') { prizeSection.style.background = 'linear-gradient(45deg, #ffd700, #ff8800)'; prizeSection.style.color = '#000'; winTrophy.textContent = '🥇'; }
-    renderFinalResults('winFinalResults');
     document.getElementById('winOverlay').classList.add('active');
 }
 
@@ -1761,160 +1864,9 @@ function goToMainMenu() {
     showScreen('modeScreen');
 }
 
-// ===== TUTORIAL =====
-let tutorialActive = false;
-let tutorialStep = 0;
-let tutorialTaskProgress = 0;
-let tutorialCheckInterval = null;
-const TOTAL_TUTORIAL_STEPS = 8;
-let tutorialSeen = localStorage.getItem('wormsTutorialSeen') === 'true';
-
-function updateTutBadge() {
-    const badge = document.getElementById('tutNewBadge');
-    if (badge) badge.style.display = tutorialSeen ? 'none' : 'inline';
-}
-
-function startTutorial() {
-    tutorialSeen = true;
-    localStorage.setItem('wormsTutorialSeen', 'true');
-    updateTutBadge();
-    tutorialActive = true;
-    tutorialStep = 0;
-    tutorialTaskProgress = 0;
-    showTutorialStep(0);
-}
-
-function showTutorialStep(step) {
-    tutorialStep = step;
-    const overlay = document.getElementById('tutorialOverlay');
-    const box = document.getElementById('tutorialBox');
-    overlay.classList.add('active');
-    box.className = 'tutorial-box center';
-    const dots = generateDots(step);
-    switch(step) {
-        case 0:
-            box.innerHTML = `<div class="tut-step">Step 1 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🎮 Welcome to Worms Zone!</div><div class="tut-text">Namaste! 🙏 Main tumhe sikhaunga ki ye game kaise khelte hain.<br><br>Tum ek <span class="highlight">snake</span> ho. Goal:<br>• 🍎 <span class="highlight">Fruits khao</span> aur bade bano<br>• 💀 <span class="warn">Enemies se bacho</span><br>• ⏱️ <span class="gold">Time tak survive karo!</span></div>${dots}<div class="tut-btns"><button class="tut-btn primary" onclick="showTutorialStep(1)">Start ➜</button><button class="tut-btn skip" onclick="endTutorial()">Skip</button></div>`;
-            break;
-        case 1:
-            box.innerHTML = `<div class="tut-step">Step 2 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🕹️ Controls</div><div class="tut-text" style="margin-bottom:5px;"><span class="highlight">📱 Mobile:</span></div><div class="tut-keys"><div class="tut-key"><span class="icon">◀</span>Left<br><span class="label">Turn</span></div><div class="tut-key"><span class="icon">▶</span>Right<br><span class="label">Turn</span></div><div class="tut-key"><span class="icon">🚀</span>Boost<br><span class="label">Fast</span></div></div><div class="tut-text" style="margin-bottom:5px;"><span class="highlight">💻 Laptop:</span></div><div class="tut-keys"><div class="tut-key"><span class="icon">🖱️</span>Mouse<br><span class="label">Move</span></div><div class="tut-key"><span class="icon">⬅️➡️</span>Arrows<br><span class="label">Turn</span></div><div class="tut-key"><span class="icon">Space</span>Spacebar<br><span class="label">Boost</span></div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(0)">← Back</button><button class="tut-btn primary" onclick="showTutorialStep(2)">Next ➜</button></div>`;
-            break;
-        case 2:
-            box.className = 'tutorial-box top';
-            startTutorialGame();
-            box.innerHTML = `<div class="tut-step">Step 3 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🐍 Move!</div><div class="tut-text">Snake ko <span class="highlight">move</span> karo!</div><div class="tut-task">🎯 Move for 5 seconds!<div class="task-progress" id="tutTaskDisplay">⏱️ 5s</div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="endTutorial()">Skip</button></div>`;
-            tutorialTaskProgress = 5;
-            if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
-            tutorialCheckInterval = setInterval(() => {
-                tutorialTaskProgress--;
-                const display = document.getElementById('tutTaskDisplay');
-                if (display) display.textContent = `⏱️ ${tutorialTaskProgress}s`;
-                if (tutorialTaskProgress <= 0) { clearInterval(tutorialCheckInterval); showTutorialStep(3); }
-            }, 1000);
-            break;
-        case 3:
-            box.className = 'tutorial-box top';
-            tutorialTaskProgress = 0;
-            box.innerHTML = `<div class="tut-step">Step 4 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🍎 Collect Fruits!</div><div class="tut-text">Fruits khao - score badhega aur snake bada hoga!<br><br>🍎 Apple=10 🍇 Grape=15 🍉 Watermelon=20</div><div class="tut-task">🎯 Collect 5 fruits!<div class="task-progress" id="tutTaskDisplay">0 / 5 🍎</div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="endTutorial()">Skip</button></div>`;
-            if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
-            tutorialCheckInterval = setInterval(() => {
-                const display = document.getElementById('tutTaskDisplay');
-                if (display) display.textContent = `${tutorialTaskProgress} / 5 🍎`;
-                if (tutorialTaskProgress >= 5) { clearInterval(tutorialCheckInterval); showTutorialStep(4); }
-            }, 300);
-            break;
-        case 4:
-            box.className = 'tutorial-box center';
-            box.innerHTML = `<div class="tut-step">Step 5 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🍾 Power-Ups!</div><div class="tut-text">Glowing bottles uthao for special powers!</div><div class="tut-powerlist"><div class="tut-poweritem" style="color:#00ccff;"><span class="p-icon">⚡</span><span class="p-name">Speed</span><span class="p-desc">30s fast</span></div><div class="tut-poweritem" style="color:#00ff88;"><span class="p-icon">🛡️</span><span class="p-name">Shield</span><span class="p-desc">1 hit save</span></div><div class="tut-poweritem" style="color:#ffd700;"><span class="p-icon">🧲</span><span class="p-name">Magnet</span><span class="p-desc">Attract food</span></div><div class="tut-poweritem" style="color:#ff4444;"><span class="p-icon">🔥</span><span class="p-name">Fire</span><span class="p-desc">Kill touch</span></div><div class="tut-poweritem" style="color:#aa44ff;"><span class="p-icon">👻</span><span class="p-name">Ghost</span><span class="p-desc">Pass through</span></div><div class="tut-poweritem" style="color:#ff8800;"><span class="p-icon">💎</span><span class="p-name">2X</span><span class="p-desc">Double pts</span></div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(3)">← Back</button><button class="tut-btn primary" onclick="showTutorialStep(5)">Next ➜</button></div>`;
-            break;
-        case 5:
-            box.className = 'tutorial-box bottom';
-            box.innerHTML = `<div class="tut-step">Step 6 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🚀 Boost!</div><div class="tut-text">Boost = 2x speed for 3 sec<br>Cooldown: 10 sec<br>💻 Spacebar | 📱 🚀 Button</div><div class="tut-task">🎯 Try Boost!<div class="task-progress" id="tutTaskDisplay">Waiting... 🚀</div></div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(6)">Skip ➜</button></div>`;
-            if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
-            tutorialCheckInterval = setInterval(() => {
-                if (boostActive) {
-                    const display = document.getElementById('tutTaskDisplay');
-                    if (display) display.textContent = '✅ Boost Active!';
-                    clearInterval(tutorialCheckInterval);
-                    setTimeout(() => showTutorialStep(6), 2000);
-                }
-            }, 200);
-            break;
-        case 6:
-            box.className = 'tutorial-box top';
-            box.innerHTML = `<div class="tut-step">Step 7 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">⚔️ Enemies!</div><div class="tut-text"><span class="warn">❌ DEATH:</span><br>• Enemy body me headbutt = GAME OVER<br>• Map border = GAME OVER<br><br><span class="highlight">✅ KILL:</span><br>• Enemy head tumhare body me lage = Enemy dies!<br>• 🔥 Fire power touch = Instant kill!</div>${dots}<div class="tut-btns"><button class="tut-btn skip" onclick="showTutorialStep(5)">← Back</button><button class="tut-btn primary" onclick="showTutorialStep(7)">Next ➜</button></div>`;
-            break;
-        case 7:
-            box.className = 'tutorial-box center';
-            stopTutorialGame();
-            box.innerHTML = `<div class="tut-step">Step 8 of ${TOTAL_TUTORIAL_STEPS}</div><div class="tut-title">🎉 Complete!</div><div class="tut-text">Ready ho! 💪<br><br><span class="gold">🏆 Tips:</span><br>• 🛡️ Shield pehle uthao<br>• 🧲 Magnet se fast collect<br>• 🗺️ Minimap dekhte raho</div><div style="font-size:50px; margin:15px 0; text-align:center;">🏆🐍🎮</div>${dots}<div class="tut-btns"><button class="tut-btn success" onclick="endTutorial()">🎮 Let's Play!</button></div>`;
-            break;
-    }
-}
-
-function generateDots(activeStep) {
-    let html = '<div class="tut-progress">';
-    for (let i = 0; i < TOTAL_TUTORIAL_STEPS; i++) {
-        let cls = '';
-        if (i === activeStep) cls = 'active';
-        else if (i < activeStep) cls = 'done';
-        html += `<div class="tut-dot ${cls}"></div>`;
-    }
-    html += '</div>';
-    return html;
-}
-
-function startTutorialGame() {
-    showScreen('gameScreen');
-    isMultiplayer = false;
-    WORLD.w = 3000;
-    WORLD.h = 2400;
-    timeLimit = 999;
-    totalKills = 0; score = 0;
-    activePowers = {};
-    updatePowerDisplay();
-    document.getElementById('mapName').textContent = '📖 Tutorial';
-    document.getElementById('playerNameDisplay').textContent = playerName || 'Player';
-    document.getElementById('killsValue').textContent = '0';
-    const skin = SKINS[selectedSkin];
-    player = { name: playerName || 'Player', skin: skin, segments: [], radius: 12, speed: 4, angle: 0, alive: true };
-    for (let i = 0; i < 10; i++) player.segments.push({ x: WORLD.w/2, y: WORLD.h/2 + i*8 });
-    foods = []; for (let i = 0; i < 200; i++) createFood();
-    bottles = []; for (let i = 0; i < 20; i++) createBottle();
-    enemies = []; 
-    for (let i = 0; i < 10; i++) createEnemy();
-    gameRunning = true;
-    gameStartTime = Date.now();
-    boostActive = false; canBoost = true;
-    boostTimer = 0; boostCooldownTimer = 0;
-    document.getElementById('boostBtn').classList.remove('active', 'cooldown');
-    document.getElementById('boostBtn').innerHTML = '🚀<br>BOOST';
-    if (timerInterval) clearInterval(timerInterval);
-    document.getElementById('timerValue').textContent = '📖 TUT';
-    document.getElementById('timerValue').classList.remove('warning');
-    lastFrameTime = Date.now();
-    gameLoop();
-}
-
-function stopTutorialGame() {
-    gameRunning = false;
-    if (tutorialCheckInterval) clearInterval(tutorialCheckInterval);
-}
-
-function endTutorial() {
-    tutorialActive = false;
-    stopTutorialGame();
-    document.getElementById('tutorialOverlay').classList.remove('active');
-    if (tutorialCheckInterval) {
-        clearInterval(tutorialCheckInterval);
-        tutorialCheckInterval = null;
-    }
-    showScreen('modeScreen');
-}
-
 document.getElementById('nameInput').addEventListener('keypress', e => { if (e.key === 'Enter') submitName(); });
 document.getElementById('joinCodeInput').addEventListener('keypress', e => { if (e.key === 'Enter') joinRoom(); });
 
-// AUTO-LOAD SAVED NAME ON STARTUP
 window.addEventListener('load', () => {
     const savedName = localStorage.getItem('wormsPlayerName');
     if (savedName) {
@@ -1923,7 +1875,7 @@ window.addEventListener('load', () => {
         updateCoinDisplay();
         showScreen('modeScreen');
     }
-    updateTutBadge();
+    updateControlSelection();
 });
 
 updateCoinDisplay();
